@@ -1,0 +1,71 @@
+package com.aimercet.advcontainer.item.item;
+
+import com.aimercet.advcontainer.item.ItemType;
+import com.aimercet.advcontainer.item.Quality;
+import com.aimercet.advcontainer.util.SizeInt;
+import com.aimercet.brlib.localization.Localization;
+import com.aimercet.brlib.log.LogBuilder;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
+
+public class TypeItem
+{
+    public static String loader_item_size             = Localization.register("loader_item_size","The size of item $s is not standardized");
+
+    public final String id;
+
+    public ItemType type;
+    public Quality quality;
+
+    public int maxAmount;
+    public long systemPrice;
+
+    public float maxDuration;
+    public boolean durationBreak = false;
+
+    public SizeInt defaultSize = new SizeInt(1, 1);
+
+    public TypeItem(String id)
+    {
+        this.id = id;
+    }
+
+    public ItemStack createItem()
+    {
+        return new ItemStack(Material.valueOf(id));
+    }
+
+    public SizeInt getSize(ItemStack isk)
+    {
+        return defaultSize;
+    }
+    public SizeInt getSize() {return defaultSize;}
+
+    public boolean hasDuration(){return maxDuration>0F;}
+
+    public void load(ConfigurationSection section)
+    {
+        type           = ItemType.valueOf(section.getString("type"));
+        quality        = Quality.fromLevel(section.getInt("quality",0));
+
+        maxAmount      = section.getInt("maxAmount",1);
+        systemPrice    = section.getLong("systemPrice",0);
+
+        maxDuration    = (float)section.getDouble("maxDuration",-1D);
+        durationBreak  = section.getBoolean("durationBreak",false);
+
+        defaultSize = new SizeInt(section.getInt("sizeWidth",1), section.getInt("sizeHeight",1));
+    }
+
+    public String getID() {return id;}
+    public ItemType getType()           {return type;}
+    public Quality getQuality()         {return quality;}
+    public int getMaxAmount()           {return maxAmount;}
+    public long getSystemPrice()        {return systemPrice;}
+    public float getMaxDuration()       {return maxDuration;}
+    public boolean isDurationBreak()    {return durationBreak;}
+    public SizeInt getDefaultSize()     {return defaultSize;}
+
+    @Override public String toString() {return getClass().getSimpleName()+"[ID="+getID()+", Type:"+type+", "+getSize()+"]";}
+}

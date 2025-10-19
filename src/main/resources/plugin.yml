@@ -1,0 +1,12 @@
+name: ADVContainer
+version: '${version}'
+main: com.aimercet.advcontainer.ADVContainer
+authors: [A1MERCet]
+website: https://space.bilibili.com/33685373
+commands:
+  con:
+    description: admin command
+    permission: "cmd.advcontainer.container"
+  itm:
+    description: admin command
+    permission: "cmd.advcontainer.item"

@@ -50,7 +50,7 @@ public class TypeItem
         quality        = Quality.fromLevel(section.getInt("quality",0));
 
         maxAmount      = section.getInt("maxAmount",1);
-        systemPrice    = section.getLong("systemPrice",0);
+        systemPrice    = section.getLong("systemPrice",-1L);
 
         maxDuration    = (float)section.getDouble("maxDuration",-1D);
         durationBreak  = section.getBoolean("durationBreak",false);

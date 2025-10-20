@@ -1,5 +1,8 @@
 package com.aimercet.advcontainer.item;
 
+import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
+import com.aimercet.advcontainer.container.IContainer;
+import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.brlib.Options;
 import com.aimercet.brlib.localization.Localization;
@@ -7,6 +10,7 @@ import com.aimercet.brlib.log.LogBuilder;
 import com.aimercet.brlib.log.Logger;
 import com.aimercet.brlib.util.MapBuilder;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,23 +19,28 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class ItemManager
 {
+    public static HashMap<String,Class<? extends ISlotItem>> slotItemClass = new MapBuilder<String,Class<? extends ISlotItem>>()
+            .put(SlotItemStack.CLASS_NAME, SlotItemStack.class)
+            .map;
+    public static Class<? extends ISlotItem> getSlotItemClass(String id){return slotItemClass.get(id);}
+    public static void registerSlotItemClass(String id , ISlotItem slotItem){slotItemClass.put(id, slotItem.getClass());}
+
     public static HashMap<String,Material> materialsCache = new HashMap<>();
     static {
         for (Material material : Material.values())
             materialsCache.put(material.name().toUpperCase(), material);
     }
 
-    public static HashMap<String,Class<TypeItem>> loadClasses = new MapBuilder<String,Class<TypeItem>>()
+    public static HashMap<String,Class<TypeItem>> typeItemClass = new MapBuilder<String,Class<TypeItem>>()
             .put("default",TypeItem.class)
             .map;
 
     public static ItemManager instance;
     public static TypeItem Get(String id){return instance.items.get(id);}
-    public static TypeItem Get(ItemStack isk){return instance.items.get(isk.getType().name());}
+    public static TypeItem Get(ItemStack isk){return isk==null?null:instance.items.get(isk.getType().name());}
 
     private HashMap<String,TypeItem> items = new HashMap();
 
@@ -69,44 +78,72 @@ public class ItemManager
 
         Logger.info(Localization.get(loader_item_start));
         String path = Options.Instance().configPath+"/items/";
-        for(File f : Objects.requireNonNull(new File(path).listFiles()))
-        {
-            YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
-            if(yml.getConfigurationSection("item")==null)continue;
-            for(String pathID : yml.getConfigurationSection("item").getKeys(false))
+        File directory = new File(path);
+
+        if(directory.exists() && directory.isDirectory()) {
+            for(File f : directory.listFiles())
             {
-                String id = pathID.toUpperCase();
+                YamlConfiguration yml = YamlConfiguration.loadConfiguration(f);
+                if(yml.getConfigurationSection("item")==null)continue;
+                for(String pathID : yml.getConfigurationSection("item").getKeys(false))
+                {
+                    String id = pathID.toUpperCase();
 
-                if(items.containsKey(id)){
-                    Logger.error(Localization.get(loader_item_repeated,"$s",id));
-                    continue;
+                    if(items.containsKey(id)){
+                        Logger.error(Localization.get(loader_item_repeated,"$s",id));
+                        continue;
+                    }
+
+                    if(!materialsCache.containsKey(id)){
+                        Logger.error(Localization.get(loader_item_materialnotfound,"$s",id));
+                        continue;
+                    }
+
+                    String clzName = yml.getString("item."+pathID+".class");
+                    Class<TypeItem> clz = typeItemClass.get(clzName.toLowerCase());
+                    if(clz==null){
+                        LogBuilder.Text(id+" ").lang(loader_item_class).error();
+                        continue;
+                    }
+
+                    TypeItem item = null;
+                    try {item = clz.getConstructor(String.class).newInstance(id);} catch (Exception e) {e.printStackTrace();}
+                    if(item==null) {
+                        LogBuilder.Text(id+" ").lang(loader_item_initfailed).error();
+                        continue;
+                    }
+
+                    item.load(yml.getConfigurationSection("item."+pathID));
+                    add(item);
+
+                    Logger.info("已加载物品: "+item.id+"["+ clzName+"/"+Localization.get(item.type.lang) +"]");
                 }
-
-                if(!materialsCache.containsKey(id)){
-                    Logger.error(Localization.get(loader_item_materialnotfound,"$s",id));
-                    continue;
-                }
-
-                String clzName = yml.getString("item."+pathID+".class");
-                Class<TypeItem> clz = loadClasses.get(clzName.toLowerCase());
-                if(clz==null){
-                    LogBuilder.Text(id+" ").lang(loader_item_class).error();
-                    continue;
-                }
-
-                TypeItem item = null;
-                try {item = clz.getConstructor(String.class).newInstance(id);} catch (Exception e) {e.printStackTrace();}
-                if(item==null) {
-                    LogBuilder.Text(id+" ").lang(loader_item_initfailed).error();
-                    continue;
-                }
-
-                item.load(yml.getConfigurationSection("item."+pathID));
-                add(item);
-
-                Logger.info("Loaded item: "+item.id+"["+ clzName+"/"+Localization.get(item.type.lang) +"]");
             }
+        }else {Logger.warn("没有找到任何物品注册配置文件");}
+
+    }
+
+    public static ISlotItem loadSlotItem(ConfigurationSection section)
+    {
+        if(section==null)return null;
+
+        Class<? extends ISlotItem> clz = ItemManager.getSlotItemClass(section.getString("class"));
+        if(clz == null){
+            Logger.error("slot item class["+section.getString("class")+"] not found");return null;}
+
+        if(clz == SlotItemStack.class){
+            ItemStack isk = section.getItemStack("content");
+            if(isk==null)return null;
+
+            ISlotItem instance = null;
+
+            try {
+                instance = clz.getConstructor(ItemStack.class).newInstance(isk);
+                instance.load(section);
+            } catch (Exception e) {e.printStackTrace();}
+            return instance;
         }
+        return null;
     }
 
     public static ItemStack increaseDuration(ItemStack isk , float amount)
@@ -140,6 +177,14 @@ public class ItemManager
     public static long getAmount(ItemStack isk)
     {
         return getLong(isk,"amount");
+    }
+    public static String getContainer(ItemStack isk)
+    {
+        return getValue(isk,"container");
+    }
+    public static ItemStack setContainer(ItemStack isk , IContainer container)
+    {
+        return setLore(isk,"container",container.getUUID());
     }
     public static ItemStack setDuration(ItemStack isk , float amount)
     {

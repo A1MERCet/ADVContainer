@@ -1,7 +1,11 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
+import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.util.Coord;
+import com.aimercet.advcontainer.util.UtilFile;
+import com.aimercet.advcontainer.util.UtilItem;
+import org.bukkit.configuration.ConfigurationSection;
 
 public class Slot implements ISlot
 {
@@ -15,6 +19,22 @@ public class Slot implements ISlot
     {
         this.stock = stock;
         this.coord = coord;
+    }
+
+    @Override
+    public void load(ConfigurationSection section)
+    {
+        if(section==null)return;
+        rotate = section.getBoolean("rotate",false);
+        item = ItemManager.loadSlotItem(section.getConfigurationSection("slotItem"));
+    }
+
+    @Override
+    public void save(ConfigurationSection section)
+    {
+        if(section==null)return;
+        section.set("rotate",rotate);
+        item.save(section.getConfigurationSection("slotItem"));
     }
 
     @Override public IStock getStock() {return stock;}

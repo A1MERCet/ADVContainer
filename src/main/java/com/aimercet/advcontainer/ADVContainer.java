@@ -1,8 +1,10 @@
 package com.aimercet.advcontainer;
 
+import com.aimercet.advcontainer.bridge.BRLibBridge;
 import com.aimercet.advcontainer.command.CMDContainer;
 import com.aimercet.advcontainer.command.CMDItem;
 import com.aimercet.advcontainer.container.ContainerManager;
+import com.aimercet.advcontainer.event.PlayerEventHandler;
 import com.aimercet.advcontainer.item.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,8 +23,15 @@ public final class ADVContainer extends JavaPlugin {
     {
         itemManager = new ItemManager();
         containerManager = new ContainerManager();
+
+        new BRLibBridge().init();
+
         registerCMD();
         registerEvent();
+    }
+
+    public void handleBRLib()
+    {
     }
 
     @Override
@@ -38,6 +47,6 @@ public final class ADVContainer extends JavaPlugin {
     }
     private void registerEvent()
     {
-//        Bukkit.getPluginManager().registerEvents(new EventPlayer(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerEventHandler(), this);
     }
 }

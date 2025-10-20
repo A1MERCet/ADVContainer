@@ -15,18 +15,18 @@ public class ItemType
     public static ItemType valueOf(String id){return map.get(id);}
     public static boolean contains(String id){return map.containsKey(id);}
 
-    public static ItemType MISC = new ItemType(Localization.register("MISC","Misc"),null,new ArrayList<>());
-    public static ItemType TOOL = new ItemType(Localization.register("TOOL","Tool"),null,new ArrayList<>());
+    public static ItemType MISC = new ItemType("MISC",null,new ArrayList<>());
+    public static ItemType TOOL = new ItemType("TOOL",null,new ArrayList<>());
 
-    public static ItemType WEAPON = new ItemType(Localization.register("WEAPON","Weapon"),null,new ArrayList<>());
-    public static ItemType BULLET = new ItemType(Localization.register("BULLET","Bullet"),null,new ArrayList<>());
-    public static ItemType MAGAZINE = new ItemType(Localization.register("MAGAZINE","Magazine"),null,new ArrayList<>());
+    public static ItemType WEAPON = new ItemType("WEAPON",null,new ArrayList<>());
+    public static ItemType BULLET = new ItemType("BULLET",null,new ArrayList<>());
+    public static ItemType MAGAZINE = new ItemType("MAGAZINE",null,new ArrayList<>());
 
-    public static ItemType ARMOR = new ItemType(Localization.register("ARMOR","Armor"),null,new ArrayList<>());
+    public static ItemType ARMOR = new ItemType("ARMOR",null,new ArrayList<>());
 
-    public static ItemType MEDICAL = new ItemType(Localization.register("MEDICAL","Medical"),null,new ArrayList<>());
+    public static ItemType MEDICAL = new ItemType("MEDICAL",null,new ArrayList<>());
 
-    public static ItemType EDIBLE = new ItemType(Localization.register("EDIBLE","Edible"),null,new ArrayList<>());
+    public static ItemType EDIBLE = new ItemType("EDIBLE",null,new ArrayList<>());
     ;
     public final String id;
     public final String lang;
@@ -37,7 +37,7 @@ public class ItemType
     ItemType(String id, ItemType parent, List<ItemType> childs)
     {
         this.id = id;
-        this.lang = "item_type_"+id;
+        this.lang = "item_type_"+id.toLowerCase();
         Localization.register(this.lang,id);
         this.parent = parent;
         this.childs.addAll(childs);

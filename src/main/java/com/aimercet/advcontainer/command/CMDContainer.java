@@ -2,15 +2,16 @@ package com.aimercet.advcontainer.command;
 
 import com.aimercet.advcontainer.container.*;
 import com.aimercet.advcontainer.container.handler.*;
-import com.aimercet.advcontainer.container.handler.source.HandleSourcePlayer;
+import com.aimercet.advcontainer.bridge.brlib.HandleSourcePlayer;
 import com.aimercet.advcontainer.container.handler.source.IHandleSource;
-import com.aimercet.advcontainer.container.slotitem.SlotItemStack;
+import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.advcontainer.util.Util;
 import com.aimercet.brlib.command.CMDBasic;
+import com.aimercet.brlib.player.PlayerManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,9 +36,9 @@ public class CMDContainer extends CMDBasic
         ContainerTemplate t1 = new ContainerTemplate().addStock(new SizeInt(4,4));
         ContainerTemplate t2 = new ContainerTemplate().addStock(new SizeInt(6,8));
         ContainerTemplate t3 = new ContainerTemplate().addStock(new SizeInt(6,6)).addStock(new SizeInt(2,2));
-        IContainer c1 = t1.create(ContainerManager.instance.sourceSystem, ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString());
-        IContainer c2 = t2.create(ContainerManager.instance.sourceSystem, ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString());
-        IContainer c3 = t3.create(ContainerManager.instance.sourceSystem, ContainerManager.instance.handlerGeneral, "test");
+        IContainer c1 = t1.create(ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString()).setInventorySource(ContainerManager.instance.sourceSystem);
+        IContainer c2 = t2.create(ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString()).setInventorySource(ContainerManager.instance.sourceSystem);
+        IContainer c3 = t3.create(ContainerManager.instance.handlerGeneral, "test").setInventorySource(ContainerManager.instance.sourceSystem);
 
         PlaceResult r1 = c3.getHandler().place(ContainerManager.instance.handleSourceSystem, new SlotItemStack(ItemManager.Get("STONE").createItem()),c3);
         sender.sendMessage("PlaceResult: "+r1);
@@ -181,7 +182,7 @@ public class CMDContainer extends CMDBasic
 
     public IHandleSource parseSender(CommandSender sender)
     {
-        if(sender instanceof Player) return new HandleSourcePlayer((Player) sender);
+        if(sender instanceof Player) return HandleSourcePlayer.fromPlayer(PlayerManager.Get((Player)sender));
         else return ContainerManager.instance.handleSourceSystem;
     }
 

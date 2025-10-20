@@ -1,21 +1,21 @@
 package com.aimercet.advcontainer.container.source;
 
-import com.aimercet.brlib.localization.Localization;
-
-public class SourceSystem implements IContainerSource
+public class SourcePlayer implements IContainerSource
 {
     public final String inventorySourceID;
     public final String inventorySourceLang;
 
-    public SourceSystem()
+    public SourcePlayer()
     {
         this.inventorySourceID = "system";
-        this.inventorySourceLang = Localization.register("container.source.system","系统");
+        this.inventorySourceLang = "container.source.system";
     }
 
     @Override public String getInventorySourceID() {return inventorySourceID;}
     @Override public String getInventorySourceLang() {return inventorySourceLang;}
 
-    @Override public String toString() {return getClass().getSimpleName()+"[ID="+inventorySourceID+"]";}
+    @Override
+    public String toString() {
+        return "SourceSystem[ID="+inventorySourceID+"]";
+    }
 }
-

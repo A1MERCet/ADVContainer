@@ -1,14 +1,20 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.container.handler.IChecker;
+
 public class Stock implements IStock
 {
     private final IContainer container;
     private ISlot[][] slotsAry;
+    private IChecker checker;
 
     public Stock(IContainer container)
     {
         this.container = container;
     }
+
+    @Override public IChecker getChecker() {return checker;}
+    @Override public void setChecker(IChecker c) {this.checker = c;}
 
     @Override public IContainer getContainer() {return container;}
     @Override public ISlot[][] getSlots() {return slotsAry;}

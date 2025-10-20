@@ -7,7 +7,7 @@ public class RemoveResult extends HandleResult
 {
     public enum Type
     {
-        SUCCESS,REFUSE,COORD_NULL,ITEM_NULL,ITEM_SIZE,STOCK_SIZE,NO_ITEM
+        SUCCESS,REFUSE,COORD_NULL,ITEM_NULL, SIZE_ERROR,STOCK_SIZE,NO_ITEM
     }
 
 

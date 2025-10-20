@@ -1,30 +1,55 @@
 package com.aimercet.advcontainer.container;
 
-import com.aimercet.advcontainer.container.handler.IInventoryHandler;
+import com.aimercet.advcontainer.container.handler.IContainerHandler;
+import com.aimercet.advcontainer.container.handler.PlaceResult;
+import com.aimercet.advcontainer.container.handler.RemoveResult;
 import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory;
-import com.aimercet.advcontainer.container.source.IInventorySource;
+import com.aimercet.advcontainer.container.source.IContainerSource;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 
 public interface IContainer
 {
     String getUUID();
-    IInventoryHandler getHandler();
-    void setHandler(IInventoryHandler handler);
+    String getClassName();
+    String getDefaultHandler();
+    IContainerHandler getHandler();
+    void setHandler(IContainerHandler handler);
     List<IStock> getStockList();
-    IInventorySource getInventorySource();
+    IContainerSource getInventorySource();
+    IContainer setInventorySource(IContainerSource source);
     InventoryHandleHistory getInventoryHandleHistory();
 
-    default IStock addStock(SizeInt size){getStockList().add(new Stock(this).setSize(size));return getStockList().get(getStockList().size()-1);}
+    default IStock addStock(SizeInt size){IStock s = createStock(size);getStockList().add(s);return s;}
+    default IStock createStock(SizeInt size){return new Stock(this).setSize(size);}
     default ISlot createSlot(IStock stock, Coord coord){return new Slot(stock, coord);}
-
 
     default boolean isFull()
     {
         for (IStock stock : getStockList())
             if(!stock.isFull()) return false;
         return true;
+    }
+
+    default void onPlace(PlaceResult result){}
+    default void onRemove(RemoveResult result){}
+
+    default void load(ConfigurationSection section)
+    {
+        for (int i = 0; i < getStockList().size(); i++)
+        {
+            ConfigurationSection s = section.getConfigurationSection("Content.Stock"+i);
+            if(s!=null) getStockList().get(i).load(s);
+        }
+    }
+    default void save(ConfigurationSection section)
+    {
+        section.set("uuid",getUUID());
+        section.set("class",getClassName());
+        for (int i = 0; i < getStockList().size(); i++)
+            getStockList().get(i).save(section.createSection("Content.Stock"+i));
     }
 }

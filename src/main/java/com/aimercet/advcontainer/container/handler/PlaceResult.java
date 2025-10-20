@@ -12,11 +12,14 @@ public class PlaceResult extends HandleResult
         FULL,
         BOUND,
         COORD_NULL,
-        ITEM_SIZE,
+        SIZE_ERROR,
         STOCK_SIZE,
         NO_SPACE,
         TYPE,
-        REFUSE;
+        REFUSE,
+        ITEM_NULL,
+        CHECK_FAIL
+        ;
 
     }
 

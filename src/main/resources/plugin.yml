@@ -3,6 +3,8 @@ version: '${version}'
 main: com.aimercet.advcontainer.ADVContainer
 authors: [A1MERCet]
 website: https://space.bilibili.com/33685373
+depend:
+  - BRLib
 commands:
   con:
     description: admin command

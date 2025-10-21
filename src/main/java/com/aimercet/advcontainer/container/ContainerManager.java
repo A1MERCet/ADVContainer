@@ -119,22 +119,34 @@ public class ContainerManager
         return isk;
     }
 
-    public IContainer loadContainer(String uuid) {return loadContainer(new File(getFilePath()+uuid+".yml"));}
-    public IContainer loadContainer(File file)
+    public IContainer loadContainer(String uuid) {return loadContainer(uuid,false);}
+    public IContainer loadContainer(String uuid,boolean overwrite) {
+        if(uuid==null) return null;
+        IContainer registry = containerMap.get(uuid);
+        if(registry!=null)return registry;
+        return loadContainer(new File(getFilePath()+uuid+".yml"),overwrite);
+    }
+    public IContainer loadContainer(File file){return loadContainer(file,false);}
+    public IContainer loadContainer(File file,boolean overwrite)
     {
         if(file==null || !file.exists())return null;
         YamlConfiguration cfg = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection section = cfg.getConfigurationSection("container");
         if(section==null)return null;
-        return loadContainer(section);
+        return loadContainer(section,overwrite);
     }
 
-    public IContainer loadContainer(ConfigurationSection section){return loadContainer(section);}
-    public IContainer loadContainer(ConfigurationSection section, String clz)
+    public IContainer loadContainer(ConfigurationSection section){return loadContainer(section,false);}
+    public IContainer loadContainer(ConfigurationSection section , boolean overwrite){return loadContainer(section,null,overwrite);}
+    public IContainer loadContainer(ConfigurationSection section, String clz){return loadContainer(section,clz,false);}
+    public IContainer loadContainer(ConfigurationSection section, String clz,boolean overwrite)
     {
         String cfgClz = section.getString("class");
         if(cfgClz==null || (clz!=null && !cfgClz.equals(clz)))return null;
         String uuid = section.getString("uuid");
+
+        IContainer registry = containerMap.get(uuid);
+        if(registry!=null && !overwrite)return registry;
 
         Logger.info("加载容器["+cfgClz+" - "+uuid+"]");
         IContainer container = ContainerFactory.Create(cfgClz, uuid);

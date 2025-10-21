@@ -18,10 +18,18 @@ public class ContainerHandlerEquipment implements IContainerHandler {
         this.id = "equipment";
     }
 
+    @Override public SizeInt getItemSize(ISlotItem item, ItemSource coord, boolean rotate) {return new SizeInt(1,1);}
+
     @Override
-    public SizeInt getItemSize(ISlotItem item, ItemSource coord, boolean rotate)
+    public void onPlace(PlaceResult result)
     {
-        return new SizeInt(1,1);
+        IContainerHandler.super.onPlace(result);
+    }
+
+    @Override
+    public void onRemove(RemoveResult result)
+    {
+        IContainerHandler.super.onRemove(result);
     }
 
     @Override public String getHandlerID() {return id;}

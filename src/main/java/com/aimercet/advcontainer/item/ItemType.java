@@ -10,7 +10,7 @@ import java.util.List;
 public class ItemType
 {
     public static List<ItemType> values = new ArrayList<ItemType>();
-    public static HashMap<String,ItemType> map = new HashMap<String,ItemType>();
+    private static HashMap<String,ItemType> map = new HashMap<String,ItemType>();
 
     public static ItemType valueOf(String id){return map.get(id);}
     public static boolean contains(String id){return map.containsKey(id);}
@@ -43,9 +43,16 @@ public class ItemType
         this.childs.addAll(childs);
         if(this.parent!=null) this.parent.childs.add(this);
 
+        register(this);
+    }
+
+    private ItemType register(ItemType type)
+    {
+        String id = type.id;
         if(map.containsKey(id)) Logger.error("Duplicate item type: "+id);
         values.add(this);
         map.put(this.id, this);
+        return type;
     }
 
     @Override

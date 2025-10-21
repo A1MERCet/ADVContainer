@@ -6,6 +6,7 @@ import com.aimercet.advcontainer.command.CMDItem;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.event.PlayerEventHandler;
 import com.aimercet.advcontainer.item.ItemManager;
+import com.aimercet.advcontainer.loot.LootManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,14 +16,15 @@ public final class ADVContainer extends JavaPlugin {
     public CMDItem cmdItem;
 
     public ItemManager itemManager;
-
     public ContainerManager containerManager;
+    public LootManager lootManager;
 
     @Override
     public void onEnable()
     {
         itemManager = new ItemManager();
         containerManager = new ContainerManager();
+        lootManager = new LootManager();
 
         new BRLibBridge().init();
 
@@ -32,6 +34,7 @@ public final class ADVContainer extends JavaPlugin {
 
     public void handleBRLib()
     {
+
     }
 
     @Override

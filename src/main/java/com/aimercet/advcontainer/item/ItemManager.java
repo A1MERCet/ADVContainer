@@ -4,6 +4,7 @@ import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.item.TypeItem;
+import com.aimercet.advcontainer.item.item.TypeItemContainer;
 import com.aimercet.brlib.Options;
 import com.aimercet.brlib.localization.Localization;
 import com.aimercet.brlib.log.LogBuilder;
@@ -34,8 +35,9 @@ public class ItemManager
             materialsCache.put(material.name().toUpperCase(), material);
     }
 
-    public static HashMap<String,Class<TypeItem>> typeItemClass = new MapBuilder<String,Class<TypeItem>>()
+    public static HashMap<String,Class<? extends TypeItem>> typeItemClass = new MapBuilder<String,Class<? extends TypeItem>>()
             .put("default",TypeItem.class)
+            .put("container", TypeItemContainer.class)
             .map;
 
     public static ItemManager instance;
@@ -43,13 +45,24 @@ public class ItemManager
     public static TypeItem Get(ItemStack isk){return isk==null?null:instance.items.get(isk.getType().name());}
 
     private HashMap<String,TypeItem> items = new HashMap();
+    private HashMap<ItemType,List<TypeItem>> typeMap = new HashMap();
 
     public TypeItem get(String id){return items.get(id);}
     public TypeItem get(ItemStack isk){return items.get(isk.getType().name());}
-    public HashMap<String,TypeItem> getAll(){return new HashMap<>(items);}
+    public HashMap<String,TypeItem> getAll(){return items;}
+    public HashMap<ItemType,List<TypeItem>> getTypeMap(){return typeMap;}
 
     private void add(TypeItem item)
     {
+        if(item==null) {Logger.warn("register failed - item is null");return;}
+
+        ItemType type = item.getType();
+        if(type==null) Logger.warn("item["+item.id+"] type is null");
+
+        List<TypeItem> list = typeMap.getOrDefault(type, new ArrayList<>());
+        list.add(item);
+        typeMap.put(type, list);
+
         items.put(item.id, item);
     }
 
@@ -100,7 +113,7 @@ public class ItemManager
                     }
 
                     String clzName = yml.getString("item."+pathID+".class");
-                    Class<TypeItem> clz = typeItemClass.get(clzName.toLowerCase());
+                    Class<? extends TypeItem> clz = typeItemClass.get(clzName.toLowerCase());
                     if(clz==null){
                         LogBuilder.Text(id+" ").lang(loader_item_class).error();
                         continue;

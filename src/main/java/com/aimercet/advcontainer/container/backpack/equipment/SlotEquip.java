@@ -1,15 +1,20 @@
 package com.aimercet.advcontainer.container.backpack.equipment;
 
+import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
+import com.aimercet.advcontainer.container.ContainerManager;
+import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.Slot;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
+import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.brlib.log.Logger;
+import org.bukkit.inventory.ItemStack;
 
 public class SlotEquip extends Slot
 {
     public StockEquip stockEquip;
-    public ContainerEquip containerEquip;
+    public IContainer containerEquip;
 
     public EquipType equipType;
 
@@ -22,11 +27,22 @@ public class SlotEquip extends Slot
     public void setItem(ISlotItem item)
     {
         super.setItem(item);
-        if(equipType == null){Logger.warn("EquipType is null["+toString()+"]");}
+        if(equipType == null){
+            Logger.warn("EquipType is null["+toString()+"]");
+
+            String uuid = "";
+            if(item instanceof SlotItemStack)
+            {
+                ItemStack isk = ((SlotItemStack) item).getItemStack();
+                if(isk!=null) uuid = ItemManager.getContainer(isk);
+            }
+
+            containerEquip = ContainerManager.instance.loadContainer(uuid);
+        }
     }
 
     public StockEquip getStockEquip() {return stockEquip;}
-    public ContainerEquip getContainerEquip() {return containerEquip;}
+    public IContainer getContainerEquip() {return containerEquip;}
 
     public void setEquipType(EquipType equipType) {this.equipType = equipType;}
     public EquipType getEquipType() {return equipType;}

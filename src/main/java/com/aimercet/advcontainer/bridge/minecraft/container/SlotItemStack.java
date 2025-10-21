@@ -19,6 +19,7 @@ public class SlotItemStack implements ISlotItem
         this.typeItem = ItemManager.Get(item);
     }
 
+    public ItemStack getItemStack() {return item;}
     @Override public String getClassName() {return CLASS_NAME;}
     @Override public long getAmount() {return ItemManager.getAmount(item);}
     @Override public TypeItem getTypeItem() {return typeItem;}

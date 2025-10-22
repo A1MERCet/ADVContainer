@@ -6,10 +6,9 @@ import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.Slot;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
-import com.aimercet.advcontainer.item.ItemManager;
+import com.aimercet.advcontainer.container.source.SourceEquipSlot;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.brlib.log.Logger;
-import org.bukkit.inventory.ItemStack;
 
 public class SlotEquip extends Slot
 {
@@ -27,17 +26,11 @@ public class SlotEquip extends Slot
     public void setItem(ISlotItem item)
     {
         super.setItem(item);
-        if(equipType == null){
-            Logger.warn("EquipType is null["+toString()+"]");
+        if(equipType == null) Logger.warn("EquipType is null["+toString()+"]");
 
-            String uuid = "";
-            if(item instanceof SlotItemStack)
-            {
-                ItemStack isk = ((SlotItemStack) item).getItemStack();
-                if(isk!=null) uuid = ItemManager.getContainer(isk);
-            }
-
-            containerEquip = ContainerManager.instance.loadContainer(uuid);
+        if(item instanceof SlotItemStack) {
+            containerEquip = ContainerManager.instance.loadContainer(((SlotItemStack) item).getItemStack());
+            if(containerEquip != null) containerEquip.setInventorySource(new SourceEquipSlot(this));
         }
     }
 

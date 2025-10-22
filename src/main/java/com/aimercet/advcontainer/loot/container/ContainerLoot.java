@@ -2,8 +2,10 @@ package com.aimercet.advcontainer.loot.container;
 
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.ContainerTemplate;
+import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
+import com.aimercet.advcontainer.loot.Condition.ISpawnCondition;
 import com.aimercet.advcontainer.loot.ILootState;
 import com.aimercet.advcontainer.loot.item.ILootTable;
 import com.aimercet.advcontainer.loot.trigger.ILootTrigger;
@@ -21,6 +23,8 @@ public class ContainerLoot implements IContainerLoot
     private long refreshTime;
     private boolean clearup;
     private ILootTable lootTable;
+    private boolean autoRefresh = false;
+    private ISpawnCondition condition;
 
     private ContainerTemplate containerTemplate;
 
@@ -33,35 +37,42 @@ public class ContainerLoot implements IContainerLoot
     @Override
     public void refresh(ILootTrigger trigger, ILootState lootState)
     {
-        if(lootState instanceof IContainerLootState)
+        ContainerLootState ls = lootState instanceof ContainerLootState ? (ContainerLootState)lootState : null;
+        IContainer container = ls ==null?null:ls.getContainer();
+
+        if(ls!=null && container!=null)
         {
-            IContainerLootState ls = (IContainerLootState) lootState;
-            if(ls.getContainer()!=null){
-                List<ItemStack> list = lootTable.random(trigger);
+            container.getHandler().clear(ContainerManager.instance.handleSourceSystem, container);
 
-                StringBuilder b =  new StringBuilder().append("\n容器物资["+lootID+"]生成物品["+list.size()+"]\n");
-                list.forEach(i->{
-                    ls.getContainer().getHandler().place(ContainerManager.instance.handleSourceSystem, UtilItem.toSlotItem(i),ls.getContainer());
+            List<ItemStack> list = getLootTable().random(trigger);
 
-                    TypeItem t = ItemManager.Get(i);
-                    b.append("  "+(t==null?i.getType().name():Localization.get(t.fullLang))+"\n");
-                });
-                Logger.info(b.toString());
-            }
+            StringBuilder b =  new StringBuilder().append("\n容器物资["+lootID+"]生成物品["+list.size()+"]\n");
+            list.forEach(i->{
+                ls.getContainer().getHandler().place(ContainerManager.instance.handleSourceSystem, UtilItem.toSlotItem(i),ls.getContainer());
+
+                TypeItem t = ItemManager.Get(i);
+                b.append("  "+(t==null?i.getType().name():Localization.get(t.fullLang))+"\n");
+            });
+            Logger.info(b.toString());
         }
 
         IContainerLoot.super.refresh(trigger, lootState);
     }
 
+    @Override public boolean isAutoRefresh() {return autoRefresh;}
     @Override public ILootTable getLootTable() {return lootTable;}
     @Override public ContainerTemplate getContainerTemplate() {return containerTemplate;}
-    @Override public IContainerLootState createContainerLootState() {return new ContainerLootState(this);}
+    @Override public ILootState createLootState(String id) {return new ContainerLootState(id,this);}
     @Override public String getLootID() {return lootID;}
     @Override public String getLootLang() {return lootLang;}
+    @Override public ISpawnCondition getLootCondition() {return condition;}
+    @Override public void setLootCondition(ISpawnCondition condition) {this.condition=condition;}
+
     @Override public long getRefreshTime() {return refreshTime;}
     @Override public boolean isClearUp() {return clearup;}
     public ContainerLoot setRefreshTime(long refreshTime) {this.refreshTime = refreshTime;return this;}
     public ContainerLoot setClearup(boolean clearup) {this.clearup = clearup;return this;}
     public ContainerLoot setLootTable(ILootTable lootTable) {this.lootTable = lootTable;return this;}
     public ContainerLoot setContainerTemplate(ContainerTemplate containerTemplate) {this.containerTemplate = containerTemplate;return this;}
+    public ContainerLoot setAutoRefresh(boolean autoRefresh) {this.autoRefresh = autoRefresh;return this;}
 }

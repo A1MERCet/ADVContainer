@@ -1,21 +1,16 @@
 package com.aimercet.advcontainer.container.source;
 
-public class SourcePlayer implements IContainerSource
+import org.bukkit.entity.Player;
+
+public class SourcePlayer extends SourceEntity
 {
-    public final String inventorySourceID;
-    public final String inventorySourceLang;
+    public final Player player;
 
-    public SourcePlayer()
+    public SourcePlayer(Player player)
     {
-        this.inventorySourceID = "system";
-        this.inventorySourceLang = "container.source.system";
+        super(player);
+        this.player = player;
     }
 
-    @Override public String getInventorySourceID() {return inventorySourceID;}
-    @Override public String getInventorySourceLang() {return inventorySourceLang;}
-
-    @Override
-    public String toString() {
-        return "SourceSystem[ID="+inventorySourceID+"]";
-    }
+    @Override public String getSourceLang() {return player.getName();}
 }

@@ -1,7 +1,6 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.container.backpack.equipment.ContainerEquip;
-import com.aimercet.advcontainer.container.source.IContainerSource;
 import com.aimercet.brlib.util.MapBuilder;
 
 import java.util.ArrayList;

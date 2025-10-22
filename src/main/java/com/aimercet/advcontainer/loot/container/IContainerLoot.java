@@ -6,5 +6,4 @@ import com.aimercet.advcontainer.loot.ILoot;
 public interface IContainerLoot extends ILoot
 {
     ContainerTemplate getContainerTemplate();
-    IContainerLootState createContainerLootState();
 }

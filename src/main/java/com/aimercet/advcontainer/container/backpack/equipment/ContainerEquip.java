@@ -1,6 +1,7 @@
 package com.aimercet.advcontainer.container.backpack.equipment;
 
 import com.aimercet.advcontainer.container.*;
+import com.aimercet.advcontainer.container.backpack.Backpack;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
 import com.aimercet.advcontainer.util.Coord;
@@ -9,6 +10,7 @@ import com.aimercet.advcontainer.util.SizeInt;
 public class ContainerEquip extends Container
 {
     public static final String CLASS_NAME = "EQUIP";
+    private Backpack backpack;
 
     public ContainerEquip(String uuid)
     {
@@ -36,4 +38,7 @@ public class ContainerEquip extends Container
     @Override public ISlot createSlot(IStock stock, Coord coord) {
         return super.createSlot(stock, coord);
     }
+
+    public Backpack getBackpack()                           {return backpack;}
+    public ContainerEquip setBackpack(Backpack backpack)    {this.backpack = backpack;return this;}
 }

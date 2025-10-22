@@ -5,13 +5,14 @@ import com.aimercet.advcontainer.container.handler.ContainerHandlerGeneral;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.container.handler.source.HandleSourceConfig;
 import com.aimercet.advcontainer.container.handler.source.HandleSourceSystem;
-import com.aimercet.advcontainer.container.source.IContainerSource;
-import com.aimercet.advcontainer.container.source.SourceSystem;
+import com.aimercet.advcontainer.container.source.*;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.brlib.Options;
 import com.aimercet.brlib.log.Logger;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -21,7 +22,60 @@ import java.util.List;
 
 public class ContainerManager
 {
+    private static class ContainerIndex<T> extends HashMap<T,IContainer> {
+
+        public HashMap<IContainer,T> cache = new HashMap<>();
+
+        @Override
+        public IContainer put(T key, IContainer value)
+        {
+            cache.put(value,key);
+            return super.put(key, value);
+        }
+
+        public void remove(IContainer container)
+        {
+            if(container==null)return;
+            T t = cache.get(container);
+            cache.remove(container);
+            remove(t);
+        }
+
+    }
+
     public static ContainerManager instance;
+
+    private static ContainerIndex<Location> locationCache = new ContainerIndex<>();
+    private static ContainerIndex<Entity> entityCache = new ContainerIndex<>();
+
+    public static void updateCache(IContainer container)
+    {
+        if(container==null)return;
+        ISource inventorySource = container.getInventorySource();
+
+        if(inventorySource==null){
+
+            removeCache(container);
+
+        }else if(container.getInventorySource() instanceof SourceLocation) {
+
+            SourceLocation source = (SourceLocation) container.getInventorySource();
+            if(source.getSourceLocation()!=null)
+                locationCache.put(source.getSourceLocation(),container);
+
+        }else if(container.getInventorySource() instanceof SourceEntity){
+
+            SourceEntity source = (SourceEntity) container.getInventorySource();
+            if(source.getEntity()!=null)
+                entityCache.put(source.getEntity(),container);
+
+        }
+    }
+    public static void removeCache(IContainer container)
+    {
+        locationCache.remove(container);
+        entityCache.remove(container);
+    }
 
 
     private static HashMap<String, IContainerHandler> containerHandlerMap = new HashMap<String, IContainerHandler>();
@@ -37,6 +91,8 @@ public class ContainerManager
     public ContainerHandlerEquipment handlerEquipment;
     public HandleSourceSystem handleSourceSystem;
     public HandleSourceConfig handleSourceConfig;
+
+    private long maxInteractDistance = 5L;
 
     public ContainerManager()
     {
@@ -74,30 +130,15 @@ public class ContainerManager
         onRegister(container);
         return true;
     }
-    public boolean unRegister(Container container)
-    {
-        if(container==null)return false;
-        IContainer v = containerMap.remove(container.getUUID());
-        containerList.remove(v);
-
-        if(v!=null)onUnRegister(v);
-        return v!=null;
-    }
+    public boolean unRegister(Container container){return container==null?false:unRegister(container.getUUID());}
     public boolean unRegister(String uuid)
     {
         IContainer container = containerMap.get(uuid);
+        if(container!=null)return false;
+
         containerMap.remove(uuid);
         containerList.remove(container);
-
-        if(container!=null)onUnRegister(container);
-        return container!=null;
-    }
-    public boolean unRegister(int index)
-    {
-        if(index>=containerList.size()||index<0)return false;
-        IContainer container = containerList.get(index);
-        containerList.remove(index);
-        if(container!=null)containerMap.remove(container.getUUID());
+        removeCache(container);
 
         if(container!=null)onUnRegister(container);
         return container!=null;
@@ -112,11 +153,21 @@ public class ContainerManager
         return container;
     }
 
-    public ItemStack bindToItem(ItemStack isk,IContainer container )
+    public ItemStack bindToItem(ItemStack isk,IContainer container)
     {
         if(isk==null || container==null)return null;
         ItemManager.setContainer(isk,container);
+        container.setInventorySource(new SourceItemStack(isk));
         return isk;
+    }
+
+    public IContainer loadContainer(ItemStack isk)
+    {
+        if(isk==null)return null;
+        String uuid = ItemManager.getContainer(isk);
+        IContainer container = loadContainer(uuid);
+        if(container!=null) container.setInventorySource(new SourceItemStack(isk));
+        return container;
     }
 
     public IContainer loadContainer(String uuid) {return loadContainer(uuid,false);}
@@ -159,4 +210,7 @@ public class ContainerManager
     public HashMap<String, IContainer> getContainerMap()    {return containerMap;}
     public IContainer get(String uuid)                      {return containerMap.get(uuid);}
     public IContainer get(int index)                        {return containerMap.get(index);}
+    public long getMaxInteractDistance()                    {return maxInteractDistance;}
+    public ContainerManager setMaxInteractDistance(long maxInteractDistance) {this.maxInteractDistance = maxInteractDistance;return this;
+    }
 }

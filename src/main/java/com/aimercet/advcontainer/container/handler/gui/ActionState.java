@@ -1,4 +1,4 @@
-package com.aimercet.advcontainer.container.handler.source.gui;
+package com.aimercet.advcontainer.container.handler.gui;
 
 import com.aimercet.advcontainer.container.handler.ItemSource;
 import com.sun.istack.internal.Nullable;

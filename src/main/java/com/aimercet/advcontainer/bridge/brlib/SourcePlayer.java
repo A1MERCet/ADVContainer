@@ -4,18 +4,18 @@ import com.aimercet.brlib.player.PlayerState;
 
 import java.util.HashMap;
 
-public class ContainerSourcePlayer extends ContainerSourceEntity
+public class SourcePlayer extends SourceEntity
 {
-    public static HashMap<PlayerState,ContainerSourcePlayer> sourceMap = new HashMap<>();
+    public static HashMap<PlayerState, SourcePlayer> sourceMap = new HashMap<>();
     public static void removePlayer(PlayerState playerState) {sourceMap.remove(playerState);}
-    public static ContainerSourcePlayer fromPlayer(PlayerState player)
+    public static SourcePlayer fromPlayer(PlayerState player)
     {
-        if(!sourceMap.containsKey(player)) sourceMap.put(player,new ContainerSourcePlayer(player));
+        if(!sourceMap.containsKey(player)) sourceMap.put(player,new SourcePlayer(player));
         return sourceMap.get(player);
     }
 
     public final PlayerState playerState;
-    public ContainerSourcePlayer(PlayerState playerState)
+    public SourcePlayer(PlayerState playerState)
     {
         super(playerState.getPlayer());
         this.playerState = playerState;

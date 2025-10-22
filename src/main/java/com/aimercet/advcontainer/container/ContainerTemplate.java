@@ -1,7 +1,6 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
-import com.aimercet.advcontainer.container.source.IContainerSource;
 import com.aimercet.advcontainer.util.SizeInt;
 import org.bukkit.configuration.ConfigurationSection;
 

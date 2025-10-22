@@ -8,6 +8,7 @@ public class PlaceResult extends HandleResult
 {
     public enum Type
     {
+        REFUSE,
         SUCCESS,
         FULL,
         BOUND,

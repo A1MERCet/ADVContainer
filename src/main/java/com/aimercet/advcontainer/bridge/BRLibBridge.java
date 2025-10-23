@@ -1,8 +1,8 @@
 package com.aimercet.advcontainer.bridge;
 
 import com.aimercet.advcontainer.player.modules.ModuleBackpack;
+import com.aimercet.advcontainer.player.modules.ModuleContainerState;
 import com.aimercet.brlib.player.PlayerModuleManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class BRLibBridge
 {
@@ -13,11 +13,13 @@ public class BRLibBridge
     }
 
     private boolean init = false;
-    public void init()
+    public BRLibBridge init()
     {
-        if (init) return;
+        if (init) return this;
         init = true;
 
         PlayerModuleManager.instance.registerPreModule(ModuleBackpack.class);
+        PlayerModuleManager.instance.registerPreModule(ModuleContainerState.class);
+        return this;
     }
 }

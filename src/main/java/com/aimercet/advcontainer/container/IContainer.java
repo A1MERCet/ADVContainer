@@ -1,5 +1,8 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartLocation;
+import com.aimercet.advcontainer.api.gui.container.IContainerPart;
+import com.aimercet.advcontainer.container.handler.HandleResult;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
@@ -7,12 +10,14 @@ import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory
 import com.aimercet.advcontainer.container.source.ISource;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
+import com.aimercet.brlib.player.PlayerState;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 
 public interface IContainer
 {
+
     String getUUID();
     String getClassName();
     String getDefaultHandler();
@@ -20,6 +25,7 @@ public interface IContainer
     void setHandler(IContainerHandler handler);
     List<IStock> getStockList();
     ISource getInventorySource();
+    GPartLocation getGUIStyle();
 
     default IContainer setInventorySource(ISource source)
     {
@@ -27,6 +33,10 @@ public interface IContainer
         return this;
     }
     InventoryHandleHistory getInventoryHandleHistory();
+    default void addHistory(HandleResult result)
+    {
+        getInventoryHandleHistory().add(result);
+    }
 
     default IStock addStock(SizeInt size){IStock s = createStock(size);getStockList().add(s);return s;}
     default IStock createStock(SizeInt size){return new Stock(this).setSize(size);}
@@ -57,4 +67,5 @@ public interface IContainer
         for (int i = 0; i < getStockList().size(); i++)
             getStockList().get(i).save(section.createSection("Content.Stock"+i));
     }
+    IContainerPart createGUIPart(PlayerState playerState);
 }

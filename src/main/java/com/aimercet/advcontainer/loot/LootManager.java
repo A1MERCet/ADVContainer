@@ -17,7 +17,7 @@ public class LootManager
 
     public LootManager()
     {
-        instance = new LootManager();
+        instance = this;
 
         triggerSystem = new LootTriggerSystem();
     }

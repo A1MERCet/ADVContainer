@@ -10,6 +10,7 @@ import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.advcontainer.util.Util;
+import com.aimercet.advcontainer.util.UtilCommand;
 import com.aimercet.brlib.command.CMDBasic;
 import com.aimercet.brlib.player.PlayerManager;
 import org.bukkit.command.CommandSender;
@@ -33,16 +34,6 @@ public class CMDContainer extends CMDBasic
     )
     public void printList(CommandSender sender)
     {
-        ContainerTemplate t1 = new ContainerTemplate().addStock(new SizeInt(4,4));
-        ContainerTemplate t2 = new ContainerTemplate().addStock(new SizeInt(6,8));
-        ContainerTemplate t3 = new ContainerTemplate().addStock(new SizeInt(6,6)).addStock(new SizeInt(2,2));
-        IContainer c1 = t1.create(ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString()).setInventorySource(ContainerManager.instance.sourceSystem);
-        IContainer c2 = t2.create(ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString()).setInventorySource(ContainerManager.instance.sourceSystem);
-        IContainer c3 = t3.create(ContainerManager.instance.handlerGeneral, "test").setInventorySource(ContainerManager.instance.sourceSystem);
-
-        PlaceResult r1 = c3.getHandler().place(ContainerManager.instance.handleSourceSystem, new SlotItemStack(ItemManager.Get("STONE").createItem()),c3);
-        sender.sendMessage("PlaceResult: "+r1);
-
         StringBuilder b = new StringBuilder().append("已注册的容器["+ContainerManager.instance.getContainerMap().size()).append("个]\n");
         ContainerManager.instance.getContainerMap().values().forEach(container -> b.append("    ").append(container.toString()).append("\n"));
         b.append("已注册的容器["+ContainerManager.instance.getContainerMap().size()).append("个]\n");
@@ -110,7 +101,7 @@ public class CMDContainer extends CMDBasic
     )
     public void actionRemove(CommandSender sender,String uuid,int stock,int x,int y)
     {
-        IHandleSource handleSource = parseSender(sender);
+        IHandleSource handleSource = UtilCommand.parseSender(sender);
         if(handleSource == null) {sender.sendMessage("操作者无效["+sender.getName()+"]");return;}
 
         IContainer container = ContainerManager.instance.get(uuid);
@@ -122,13 +113,44 @@ public class CMDContainer extends CMDBasic
     }
 
     @CommandArgs(
+            describe = "移动容器1指定的槽位物品至容器2的指定槽位",
+            args = {"action","容器1UUID","库存1下标","x1","y1","容器2UUID","库存2下标","x2","y2","是否旋转[true,false]"},
+            types = {ArgType.DEPEND,ArgType.STRING,ArgType.INTEGER,ArgType.INTEGER,ArgType.INTEGER,ArgType.STRING,ArgType.INTEGER,ArgType.INTEGER,ArgType.INTEGER,ArgType.BOOLEAN}
+    )
+    public void transform(CommandSender sender,String uuid1 ,int stock1index,int x1 , int y1,String uuid2 ,int stock2index,int x2 , int y2,boolean rotate)
+    {
+        IHandleSource handleSource = UtilCommand.parseSender(sender);
+        if(handleSource == null) {sender.sendMessage("操作者无效["+sender.getName()+"]");return;}
+
+        IContainer container1 = ContainerManager.instance.get(uuid1);
+        if(container1 == null) {sender.sendMessage("容器["+uuid1+"]不存在");return;}
+
+        IContainer container2 = ContainerManager.instance.get(uuid2);
+        if(container2 == null) {sender.sendMessage("容器["+uuid2+"]不存在");return;}
+
+        if(stock1index >= container1.getStockList().size()) {sender.sendMessage("容器1["+stock1index+"]下标超出索引范围");return;}
+        if(stock2index >= container2.getStockList().size()) {sender.sendMessage("容器2["+stock2index+"]下标超出索引范围");return;}
+
+        IStock stock1 = container1.getStockList().get(stock1index);
+        IStock stock2 = container2.getStockList().get(stock2index);
+
+        RemoveResult result1 = container1.getHandler().remove(handleSource, new ItemSource(stock1, new Coord(x1, y1)));
+        if(result1.type!=RemoveResult.Type.SUCCESS){sender.sendMessage("操作失败: "+result1);return;}
+
+        RemoveResult result2 = container2.getHandler().remove(handleSource, new ItemSource(stock2, new Coord(x2, y2)));
+        if(result2.type!=RemoveResult.Type.SUCCESS){sender.sendMessage("操作失败: "+result2);return;}
+
+        sender.sendMessage("操作结果: \n"+result1+"\n"+result2);
+    }
+
+    @CommandArgs(
             describe = "添加物品至容器[库存下标-1为不指定(有空位就放) 旋转,x,y传false和-1就行]",
-            args = {"action","容器UUID","add","物品ID","数量","库存下标","是否旋转[true,false","x","y"},
+            args = {"action","容器UUID","add","物品ID","数量","库存下标","是否旋转[true,false]","x","y"},
             types = {ArgType.DEPEND,ArgType.STRING,ArgType.DEPEND,ArgType.STRING,ArgType.INTEGER,ArgType.INTEGER,ArgType.BOOLEAN,ArgType.INTEGER,ArgType.INTEGER}
     )
     public void actionAddItem(CommandSender sender,String uuid,String itemID,int amount,int stock,boolean rotate,int x,int y)
     {
-        IHandleSource handleSource = parseSender(sender);
+        IHandleSource handleSource = UtilCommand.parseSender(sender);
         if(handleSource == null) {sender.sendMessage("操作者无效["+sender.getName()+"]");return;}
 
         TypeItem item = ItemManager.instance.get(itemID);
@@ -159,7 +181,7 @@ public class CMDContainer extends CMDBasic
     )
     public void actionClear(CommandSender sender,String uuid,int stockIndex)
     {
-        IHandleSource handleSource = parseSender(sender);
+        IHandleSource handleSource = UtilCommand.parseSender(sender);
         if(handleSource == null) {sender.sendMessage("操作者无效["+sender.getName()+"]");return;}
 
         IContainer container = ContainerManager.instance.get(uuid);
@@ -180,11 +202,7 @@ public class CMDContainer extends CMDBasic
         sender.sendMessage("操作结果完成");
     }
 
-    public IHandleSource parseSender(CommandSender sender)
-    {
-        if(sender instanceof Player) return HandleSourcePlayer.fromPlayer(PlayerManager.Get((Player)sender));
-        else return ContainerManager.instance.handleSourceSystem;
-    }
+
 
     /**
      * 寻找指定id的已注册容器(UUID或者指定下标)

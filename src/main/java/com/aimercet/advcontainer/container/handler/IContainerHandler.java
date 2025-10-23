@@ -25,6 +25,8 @@ public interface IContainerHandler
     {
         if(handler==null ||  target==null)return false;
 
+        if(!handler.canHandle(target))return false;
+
         if(handler instanceof HandleSourcePlayer && target.getInventorySource() instanceof ISourceLocation)
         {
             HandleSourcePlayer handlerPlayer = (HandleSourcePlayer) handler;
@@ -68,9 +70,9 @@ public interface IContainerHandler
 
     default PlaceResult place(IHandleSource handleSource, ISlotItem item, IContainer container)
     {
-        if(checkHandler(handleSource,container))return new PlaceResult(handleSource,item,PlaceResult.Type.REFUSE,null);
+        if(!checkHandler(handleSource,container))return new PlaceResult(handleSource,item,PlaceResult.Type.REFUSE,null,false);
 
-        PlaceResult result = new PlaceResult(handleSource,item,PlaceResult.Type.NO_SPACE,null);
+        PlaceResult result = new PlaceResult(handleSource,item,PlaceResult.Type.NO_SPACE,null,false);
         if(container.isFull()) return result;
 
         for (IStock stock : container.getStockList())
@@ -83,10 +85,10 @@ public interface IContainerHandler
     }
     default PlaceResult place(IHandleSource handleSource, ISlotItem item, IStock stock)
     {
-        if(!checkHandler(handleSource,stock==null?null:stock.getContainer()))return new PlaceResult(handleSource,item, PlaceResult.Type.REFUSE,null);
+        if(!checkHandler(handleSource,stock==null?null:stock.getContainer()))return new PlaceResult(handleSource,item, PlaceResult.Type.REFUSE,null,false);
 
-        PlaceResult result = new PlaceResult(handleSource,item,PlaceResult.Type.NO_SPACE,null);
-        if(stock.getSlots()==null || stock.getSize().size()<=0) return new PlaceResult(handleSource,item, PlaceResult.Type.COORD_NULL,null);
+        PlaceResult result = new PlaceResult(handleSource,item,PlaceResult.Type.NO_SPACE,null,false);
+        if(stock.getSlots()==null || stock.getSize().size()<=0) return new PlaceResult(handleSource,item, PlaceResult.Type.COORD_NULL,null,false);
         if(stock.isFull())                                      return result;
 
         SizeInt size = item.getSize();
@@ -160,26 +162,27 @@ public interface IContainerHandler
 
     default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate)
     {
-        if(!checkHandler(handleSource,coord.stock.getContainer()))return new PlaceResult(handleSource,item, PlaceResult.Type.REFUSE,coord);
+        if(!checkHandler(handleSource,coord.stock.getContainer()))return new PlaceResult(handleSource,item, PlaceResult.Type.REFUSE,coord,rotate);
 
         PlaceResult.Type preCheck = preCheck(handleSource,item, coord,rotate);
-        if(preCheck!= PlaceResult.Type.SUCCESS)                 return new PlaceResult(handleSource,item, preCheck,coord);
+        if(preCheck!= PlaceResult.Type.SUCCESS)                 return new PlaceResult(handleSource,item, preCheck,coord,rotate);
 
         PlaceResult.Type spaceCheck = spaceCheck(handleSource,item, coord,rotate);
-        if(spaceCheck!= PlaceResult.Type.SUCCESS)               return new PlaceResult(handleSource,item, spaceCheck,coord);
+        if(spaceCheck!= PlaceResult.Type.SUCCESS)               return new PlaceResult(handleSource,item, spaceCheck,coord,rotate);
 
-        Util.fillSource(coord.stock,coord.coord,item.getSize());
+        SizeInt size =  getItemSize(item,coord,rotate);
+
+        Util.fillSource(coord.stock,coord.coord,size);
         coord.stock.getSlots()[coord.coord.x][coord.coord.y].setItem(item);
         coord.stock.getSlots()[coord.coord.x][coord.coord.y].setRotate(rotate);
 
-        PlaceResult result = new PlaceResult(handleSource, item, PlaceResult.Type.SUCCESS, coord);
+        PlaceResult result = new PlaceResult(handleSource, item, PlaceResult.Type.SUCCESS, coord,rotate);
         onPlace(result);
         return result;
     }
 
     default RemoveResult remove(IHandleSource handleSource, ItemSource coord)
     {
-
         ISlotItem item = coord.getItem();;
         if(item==null)                                              return new RemoveResult(handleSource,item, RemoveResult.Type.NO_ITEM,coord);
         if(Util.checkNull(coord))                                   return new RemoveResult(handleSource,item, RemoveResult.Type.COORD_NULL,coord);
@@ -201,14 +204,14 @@ public interface IContainerHandler
 
     default void onPlace(PlaceResult result)
     {
-        result.handleSource.getInventoryHandleHistory().add(result);
-        result.coord.stock.getContainer().getInventoryHandleHistory().add(result);
+        result.handleSource.addHistory(result);
+        result.coord.stock.getContainer().addHistory(result);
         result.coord.stock.getContainer().onPlace(result);
     }
     default void onRemove(RemoveResult result)
     {
-        result.handleSource.getInventoryHandleHistory().add(result);
-        result.coord.stock.getContainer().getInventoryHandleHistory().add(result);
+        result.handleSource.addHistory(result);
+        result.coord.stock.getContainer().addHistory(result);
         result.coord.stock.getContainer().onRemove(result);
     }
 

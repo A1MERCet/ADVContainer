@@ -17,7 +17,6 @@ public class PlaceResult extends HandleResult
         STOCK_SIZE,
         NO_SPACE,
         TYPE,
-        REFUSE,
         ITEM_NULL,
         CHECK_FAIL
         ;
@@ -25,28 +24,32 @@ public class PlaceResult extends HandleResult
     }
 
     public final ItemSource source;
+    public final boolean rotate;
 
-    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource source, ItemSource target)
+    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource source, ItemSource target,boolean rotate)
     {
         super(handleSource,type,target,item);
         this.source = source;
+        this.rotate = rotate;
     }
 
-    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource target)
+    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource target,boolean rotate)
     {
         super(handleSource,type,target,item);
         this.source = null;
+        this.rotate = rotate;
     }
 
-    public PlaceResult(ISlotItem item, Type type, ItemSource target)
+    public PlaceResult(ISlotItem item, Type type, ItemSource target,boolean rotate)
     {
         super(ContainerManager.instance.handleSourceSystem, type,target,item);
         this.source = null;
+        this.rotate = rotate;
     }
 
     @Override
     public String toString() {
         String s = super.toString().replace("HandleResult","PlaceResult").replace("]","");
-        return s+", Source: "+source+"]";
+        return s+", Source: "+source+", Rotate: "+rotate+"]";
     }
 }

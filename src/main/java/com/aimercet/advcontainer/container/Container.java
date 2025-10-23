@@ -45,6 +45,6 @@ public class Container implements IContainer
     public String toString() {
         StringBuilder b = new StringBuilder();
         stockList.forEach(s -> b.append(s.toString()).append(" "));
-        return getClass().getSimpleName()+"[UUID="+uuid+", "+source+", Stock[Count="+stockList.size()+"]="+b+"]";
+        return getClass().getSimpleName()+"[UUID="+uuid+", "+source+", Stock[Count="+stockList.size()+"]="+b.toString()+"]";
     }
 }

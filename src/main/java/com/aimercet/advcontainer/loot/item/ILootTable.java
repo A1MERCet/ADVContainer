@@ -59,9 +59,9 @@ public interface ILootTable
     default ILootTable add(ILootItem item){
         getLoots().add(item);
 
-        List<ILootItem> list = getLootMap.getOrDefault(item.getQualityOverlap(), new ArrayList<>());
+        List<ILootItem> list = getLootMap().getOrDefault(item.getQualityOverlap(), new ArrayList<>());
         list.add(item);
-        getLootMap.put(item.getQualityOverlap(), list);
+        getLootMap().put(item.getQualityOverlap(), list);
 
         return this;
     }

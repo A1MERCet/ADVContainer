@@ -30,7 +30,7 @@ public class Quality
     public final float globalRate;
     public final long color;
 
-    public static HashMap<Integer,Quality> levelMap = null;
+    public static HashMap<Integer,Quality> levelMap = new HashMap<>();
 
     Quality(String id,int level, long color,float globalRate)
     {

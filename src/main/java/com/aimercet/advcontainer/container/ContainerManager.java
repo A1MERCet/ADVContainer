@@ -22,27 +22,6 @@ import java.util.List;
 
 public class ContainerManager
 {
-    private static class ContainerIndex<T> extends HashMap<T,IContainer> {
-
-        public HashMap<IContainer,T> cache = new HashMap<>();
-
-        @Override
-        public IContainer put(T key, IContainer value)
-        {
-            cache.put(value,key);
-            return super.put(key, value);
-        }
-
-        public void remove(IContainer container)
-        {
-            if(container==null)return;
-            T t = cache.get(container);
-            cache.remove(container);
-            remove(t);
-        }
-
-    }
-
     public static ContainerManager instance;
 
     private static ContainerIndex<Location> locationCache = new ContainerIndex<>();
@@ -126,7 +105,6 @@ public class ContainerManager
         containerMap.put(container.getUUID(), container);
         containerList.add(container);
 
-        Logger.info("注册容器: "+container);
         onRegister(container);
         return true;
     }

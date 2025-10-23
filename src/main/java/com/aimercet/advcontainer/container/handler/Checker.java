@@ -20,13 +20,14 @@ public class Checker implements IChecker , Cloneable
 
     }
 
-    public Checker allow(ItemType type) {allowTypes.add(type);return this;}
-    public Checker deny(ItemType type)  {blacklistTypes.add(type);return this;}
+    public Checker allow(List<ItemType> type)   {allowTypes.addAll(type);return this;}
+    public Checker allow(ItemType type)         {allowTypes.add(type);return this;}
+    public Checker deny(ItemType type)          {blacklistTypes.add(type);return this;}
 
-    public Checker allow(String id)     {allowID.add(id);return this;}
-    public Checker deny(String id)      {blacklistID.add(id);return this;}
+    public Checker allow(String id)             {allowID.add(id);return this;}
+    public Checker deny(String id)              {blacklistID.add(id);return this;}
 
-    public Checker clear()              {allowTypes.clear();blacklistTypes.clear();allowID.clear();blacklistID.clear();return this;}
+    public Checker clear()                      {allowTypes.clear();blacklistTypes.clear();allowID.clear();blacklistID.clear();return this;}
 
     @Override
     protected Object clone() throws CloneNotSupportedException {

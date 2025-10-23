@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartLocation;
 import com.aimercet.advcontainer.container.handler.IChecker;
 import com.aimercet.advcontainer.container.handler.ItemSource;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
@@ -7,7 +8,6 @@ import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
-import com.aimercet.advcontainer.util.UtilFile;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -21,6 +21,7 @@ public interface IStock
     IContainer getContainer();
     ISlot[][] getSlots();
     void setSlots(ISlot[][] ary);
+    GPartLocation getGUIStyle();
 
     default void save(ConfigurationSection section)
     {

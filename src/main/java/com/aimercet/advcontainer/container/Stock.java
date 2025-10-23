@@ -1,6 +1,8 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.container.handler.Checker;
 import com.aimercet.advcontainer.container.handler.IChecker;
+import com.aimercet.advcontainer.item.ItemType;
 
 public class Stock implements IStock
 {
@@ -11,6 +13,7 @@ public class Stock implements IStock
     public Stock(IContainer container)
     {
         this.container = container;
+        this.checker = new Checker().allow(ItemType.values);
     }
 
     @Override public IChecker getChecker() {return checker;}

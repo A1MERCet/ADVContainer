@@ -1,8 +1,11 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartStyle;
+import com.aimercet.advcontainer.api.gui.container.IPartContainer;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory;
 import com.aimercet.advcontainer.container.source.ISource;
+import com.aimercet.brlib.player.PlayerState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,8 @@ public class Container implements IContainer
 
     private final List<IStock> stockList = new ArrayList<>();
 
+    private GPartStyle guiStyle;
+
     public Container(String uuid)
     {
         this.uuid = uuid;
@@ -35,8 +40,16 @@ public class Container implements IContainer
     @Override public void setHandler(IContainerHandler handler)             {this.handler = handler;}
     @Override public List<IStock> getStockList()                            {return stockList;}
     @Override public ISource getInventorySource()                           {return source;}
+    @Override public GPartStyle getGUIStyle() {return guiStyle;}
+    public Container setGuiStyle(GPartStyle guiStyle) {this.guiStyle = guiStyle;return this;}
     @Override public IContainer setInventorySource(ISource source)          {this.source = source;return IContainer.super.setInventorySource(source);}
     @Override public InventoryHandleHistory getInventoryHandleHistory()     {return handleHistory;}
+
+    @Override
+    public IPartContainer createGUIPart(PlayerState playerState) {
+        return null;
+    }
+
     @Override public String getUUID()                                       {return uuid;}
     @Override public String getClassName()                                  {return CLASS_NAME;}
 

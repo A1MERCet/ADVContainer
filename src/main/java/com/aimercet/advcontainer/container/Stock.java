@@ -1,11 +1,13 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.handler.Checker;
 import com.aimercet.advcontainer.container.handler.IChecker;
 import com.aimercet.advcontainer.item.ItemType;
 
 public class Stock implements IStock
 {
+    private GPartStyle guiStyle;
     private final IContainer container;
     private ISlot[][] slotsAry;
     private IChecker checker;
@@ -22,6 +24,7 @@ public class Stock implements IStock
     @Override public IContainer getContainer() {return container;}
     @Override public ISlot[][] getSlots() {return slotsAry;}
     @Override public void setSlots(ISlot[][] ary) {this.slotsAry = ary;}
-
+    @Override public GPartStyle getGUIStyle() {return guiStyle;}
     @Override public String toString() {return getClass().getSimpleName()+"["+ getSize()+", Container="+container.getUUID()+"]";}
+    @Override public void setGUIStyle(GPartStyle guiStyle) {this.guiStyle = guiStyle;}
 }

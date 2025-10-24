@@ -1,10 +1,12 @@
 package com.aimercet.advcontainer;
 
+import com.aimercet.advcontainer.api.ContainerAPI;
 import com.aimercet.advcontainer.api.gui.ContainerGUIManager;
 import com.aimercet.advcontainer.bridge.BRLibBridge;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.bridge.minecraft.event.PlayerEventContainer;
-import com.aimercet.advcontainer.command.CMDContainer;
+import com.aimercet.advcontainer.command.CMDContainerAdmin;
+import com.aimercet.advcontainer.command.CMDContainerPlayer;
 import com.aimercet.advcontainer.command.CMDItem;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.ContainerTemplate;
@@ -23,7 +25,8 @@ import java.util.UUID;
 
 public final class ADVContainer extends JavaPlugin {
 
-    public CMDContainer cmdContainer;
+    public CMDContainerAdmin cmdContainerAdmin;
+    public CMDContainerPlayer cmdContainerPlayer;
     public CMDItem cmdItem;
 
     public ItemManager itemManager;
@@ -33,7 +36,8 @@ public final class ADVContainer extends JavaPlugin {
     public LootRunnable lootRunnable;
     public BRLibBridge libBridge;
 
-    public ContainerGUIManager containerGUIManager;
+    public ContainerAPI containerAPI;
+    public ContainerGUIManager  containerGUIManager;
 
     @Override
     public void onLoad()
@@ -49,6 +53,7 @@ public final class ADVContainer extends JavaPlugin {
         itemManager = new ItemManager();
         containerManager = new ContainerManager();
         lootManager = new LootManager();
+        containerAPI = new ContainerAPI();
         containerGUIManager = new ContainerGUIManager();
 
         registerCMD();
@@ -76,8 +81,12 @@ public final class ADVContainer extends JavaPlugin {
     }
     private void registerCMD()
     {
-        cmdContainer = new CMDContainer();
-        Bukkit.getPluginCommand(cmdContainer.name).setExecutor(cmdContainer);
+        cmdContainerAdmin = new CMDContainerAdmin();
+        Bukkit.getPluginCommand(cmdContainerAdmin.name).setExecutor(cmdContainerAdmin);
+
+        cmdContainerPlayer = new CMDContainerPlayer();
+        Bukkit.getPluginCommand(cmdContainerPlayer.name).setExecutor(cmdContainerPlayer);
+
         cmdItem = new CMDItem();
         Bukkit.getPluginCommand(cmdItem.name).setExecutor(cmdItem);
     }

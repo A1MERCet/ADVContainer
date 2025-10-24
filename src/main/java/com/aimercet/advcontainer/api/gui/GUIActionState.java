@@ -16,8 +16,14 @@ public class GUIActionState
 
         public ItemSource getSource() {return source;}
         public Cursor setSource(ItemSource source) {this.source = source;return this;}
+        public Cursor set(ItemSource source,boolean rotate) {setSource(source);setRotate(rotate);return this;}
         public boolean isRotate() {return rotate;}
         public Cursor setRotate(boolean rotate) {this.rotate = rotate;return this;}
+        public Cursor clear(){
+            setSource(null);
+            setRotate(false);
+            return this;
+        }
     }
 
     private final Cursor cursor;

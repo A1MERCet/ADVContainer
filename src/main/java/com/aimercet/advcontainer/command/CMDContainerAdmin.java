@@ -2,29 +2,24 @@ package com.aimercet.advcontainer.command;
 
 import com.aimercet.advcontainer.container.*;
 import com.aimercet.advcontainer.container.handler.*;
-import com.aimercet.advcontainer.bridge.brlib.HandleSourcePlayer;
 import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.util.Coord;
-import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.advcontainer.util.Util;
 import com.aimercet.advcontainer.util.UtilCommand;
 import com.aimercet.brlib.command.CMDBasic;
-import com.aimercet.brlib.player.PlayerManager;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class CMDContainer extends CMDBasic
+public class CMDContainerAdmin extends CMDBasic
 {
-    public CMDContainer()
+    public CMDContainerAdmin()
     {
-        super("con", CMDContainer.class);
+        super("con", CMDContainerAdmin.class);
     }
 
     @CommandArgs(

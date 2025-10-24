@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.container.handler;
 
+import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
@@ -37,6 +38,7 @@ public class ItemSource
         if(slot==null)return false;
         return coord.equals(slot.getCoord()) && stock.equals(slot.getStock());
     }
+    public IContainer getContainer() {return stock==null?null:stock.getContainer();}
 
     @Override
     public String toString() {

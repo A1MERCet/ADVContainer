@@ -1,6 +1,6 @@
 package com.aimercet.advcontainer.container;
 
-import com.aimercet.advcontainer.api.gui.GPartLocation;
+import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.handler.IChecker;
 import com.aimercet.advcontainer.container.handler.ItemSource;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
@@ -21,7 +21,8 @@ public interface IStock
     IContainer getContainer();
     ISlot[][] getSlots();
     void setSlots(ISlot[][] ary);
-    GPartLocation getGUIStyle();
+    GPartStyle getGUIStyle();
+    void setGUIStyle(GPartStyle guiStyle);
 
     default void save(ConfigurationSection section)
     {

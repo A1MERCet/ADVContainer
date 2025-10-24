@@ -13,7 +13,6 @@ import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.advcontainer.util.Util;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -95,11 +94,11 @@ public interface IContainerHandler
         for (int y = 0; y < stock.getSizeY(); y++)
             for (int x = 0; x < stock.getSizeX(); x++)
             {
-                result = place(handleSource, item, new ItemSource(stock, new Coord(x, y)),false);
+                result = place(handleSource, item, new ItemSource(stock, new Coord(x, y)),false,false);
                 if(result.type==PlaceResult.Type.SUCCESS) return result;
                 if(size.height!=size.width)
                 {
-                    result = place(handleSource, item, new ItemSource(stock, new Coord(x, y)),true);
+                    result = place(handleSource, item, new ItemSource(stock, new Coord(x, y)),true,false);
                     if(result.type==PlaceResult.Type.SUCCESS) return result;
                 }
             }
@@ -151,6 +150,22 @@ public interface IContainerHandler
     }
 
     /**
+     * 综合检查
+     */
+    default PlaceResult.Type checkPlace(IHandleSource handleSource, ISlotItem item, ItemSource coord , boolean rotate)
+    {
+        if(!checkHandler(handleSource,coord.stock.getContainer()))return PlaceResult.Type.REFUSE;
+
+        PlaceResult.Type preCheck = preCheck(handleSource,item, coord,rotate);
+        if(preCheck!= PlaceResult.Type.SUCCESS)                 return preCheck;
+
+        PlaceResult.Type spaceCheck = spaceCheck(handleSource,item, coord,rotate);
+        if(spaceCheck!= PlaceResult.Type.SUCCESS)               return spaceCheck;
+
+        return PlaceResult.Type.SUCCESS;
+    }
+
+    /**
      * 获取并处理物品大小
      */
     default SizeInt getItemSize(ISlotItem item , ItemSource coord , boolean rotate)
@@ -160,15 +175,13 @@ public interface IContainerHandler
         return size;
     }
 
-    default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate)
+    default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate){return place(handleSource, item, coord, rotate,false);}
+    default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate , boolean bypass)
     {
-        if(!checkHandler(handleSource,coord.stock.getContainer()))return new PlaceResult(handleSource,item, PlaceResult.Type.REFUSE,coord,rotate);
-
-        PlaceResult.Type preCheck = preCheck(handleSource,item, coord,rotate);
-        if(preCheck!= PlaceResult.Type.SUCCESS)                 return new PlaceResult(handleSource,item, preCheck,coord,rotate);
-
-        PlaceResult.Type spaceCheck = spaceCheck(handleSource,item, coord,rotate);
-        if(spaceCheck!= PlaceResult.Type.SUCCESS)               return new PlaceResult(handleSource,item, spaceCheck,coord,rotate);
+        if(!bypass){
+            PlaceResult.Type check = checkPlace(handleSource, item, coord, rotate);
+            if(check != PlaceResult.Type.SUCCESS) return new  PlaceResult(handleSource,item,check,coord,rotate);
+        }
 
         SizeInt size =  getItemSize(item,coord,rotate);
 

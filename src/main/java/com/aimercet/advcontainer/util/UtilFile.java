@@ -9,7 +9,7 @@ public class UtilFile
     {
         StringBuilder b = new StringBuilder();
         b.append("print section:\n");
-        b.append(section.toString()).append("\n");
+        b.append(section==null?"null":section.toString()).append("\n");
         if(section != null){
             b.append(getSection(section,0));
         }else{

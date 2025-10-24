@@ -6,9 +6,12 @@ website: https://space.bilibili.com/33685373
 depend:
   - BRLib
 commands:
+  conp:
+    description: player command
+    permission: "cmd.advcontainer.container.player"
   con:
     description: admin command
-    permission: "cmd.advcontainer.container"
+    permission: "cmd.advcontainer.container.admin"
   itm:
     description: admin command
     permission: "cmd.advcontainer.item"

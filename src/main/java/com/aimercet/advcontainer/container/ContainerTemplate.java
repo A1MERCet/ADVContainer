@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.util.SizeInt;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,6 +13,7 @@ public class ContainerTemplate
     public class StockTemplate
     {
         public SizeInt size;
+        public GPartStyle style = new GPartStyle();
 
         public StockTemplate() {}
 
@@ -20,9 +22,14 @@ public class ContainerTemplate
             this.size = size;
         }
 
-        public void load(ConfigurationSection section)
+        public StockTemplate setStyle(GPartStyle style) {this.style = style;return this;}
+
+        public StockTemplate load(ConfigurationSection section)
         {
+            if(section == null) return this;
             size = new SizeInt(section.getInt("width"), section.getInt("height"));
+            style.load(section.getConfigurationSection("style"));
+            return this;
         }
     }
 
@@ -38,14 +45,17 @@ public class ContainerTemplate
     {
     }
 
-    public IContainer create(IContainerHandler handler, String uuid) {return create(handler.getHandlerID(), uuid);}
-    public IContainer create(String handler, String uuid)
+    public IContainer create(String uuid) {return create(null, uuid);}
+    public IContainer create(IContainerHandler handler, String uuid)
     {
         IContainer container = ContainerFactory.Create(clzName,uuid);
         for (StockTemplate s : stockTemplateList)
         {
-            container.addStock(s.size);
+            IStock stock = container.addStock(s.size);
+            stock.setGUIStyle(s.style.clone());
         }
+
+        if(handler != null)container.setHandler(handler);
         return container;
     }
 

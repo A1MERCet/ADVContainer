@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.container;
 
-import com.aimercet.advcontainer.api.gui.GPartLocation;
-import com.aimercet.advcontainer.api.gui.container.IContainerPart;
+import com.aimercet.advcontainer.api.gui.GPartStyle;
+import com.aimercet.advcontainer.api.gui.container.IPartContainer;
 import com.aimercet.advcontainer.container.handler.HandleResult;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
@@ -25,7 +25,7 @@ public interface IContainer
     void setHandler(IContainerHandler handler);
     List<IStock> getStockList();
     ISource getInventorySource();
-    GPartLocation getGUIStyle();
+    GPartStyle getGUIStyle();
 
     default IContainer setInventorySource(ISource source)
     {
@@ -48,6 +48,11 @@ public interface IContainer
             if(!stock.isFull()) return false;
         return true;
     }
+    default IStock getStock(int index)
+    {
+        if(index < 0 || index >= getStockList().size()) return null;
+        return getStockList().get(index);
+    }
 
     default void onPlace(PlaceResult result){}
     default void onRemove(RemoveResult result){}
@@ -67,5 +72,5 @@ public interface IContainer
         for (int i = 0; i < getStockList().size(); i++)
             getStockList().get(i).save(section.createSection("Content.Stock"+i));
     }
-    IContainerPart createGUIPart(PlayerState playerState);
+    IPartContainer createGUIPart(PlayerState playerState);
 }

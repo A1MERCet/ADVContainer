@@ -19,16 +19,19 @@ public interface IHandleSource
     {
         if(c==null) return;
         getAllowedContainers().put(c.getUUID(), c);
+        if(!c.getUsers().contains(this)) c.getUsers().add(this);
     }
-    default void setContainerAllow(String uuid)
+    default void setContainerDeny(IContainer c)
     {
-        IContainer c = ContainerManager.instance.get(uuid);
         if(c==null) return;
-        getAllowedContainers().put(uuid, c);
+        getAllowedContainers().remove(c.getUUID());
+        c.getUsers().remove(this);
     }
-    default void setContainerDeny(String uuid)
+    default void setContainerDeny(String c)
     {
-        getAllowedContainers().remove(uuid);
+        IContainer container = ContainerManager.instance.get(c);
+        getAllowedContainers().remove(c);
+        if(container!=null) container.getUsers().remove(this);
     }
 
     default boolean canHandle(IContainer container){return getAllowedContainers().containsValue(container);}

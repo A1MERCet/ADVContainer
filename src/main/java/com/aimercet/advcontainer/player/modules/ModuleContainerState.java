@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.player.modules;
 
 import com.aimercet.advcontainer.api.gui.GUIActionState;
-import com.aimercet.advcontainer.bridge.brlib.HandleSourcePlayer;
+import com.aimercet.advcontainer.container.handler.source.HandleSourcePlayer;
 import com.aimercet.brlib.player.PlayerManager;
 import com.aimercet.brlib.player.PlayerModule;
 import com.aimercet.brlib.player.PlayerState;
@@ -15,7 +15,7 @@ public class ModuleContainerState extends PlayerModule
     public static String MODULE_NAME = "container_state";
 
     public HandleSourcePlayer handleSource;
-    public GUIActionState actionState;
+    public GUIActionState actionState = new GUIActionState();
 
     protected ModuleContainerState(PlayerState playerState)
     {

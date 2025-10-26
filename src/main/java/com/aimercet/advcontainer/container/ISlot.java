@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.handler.ItemSource;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.util.Coord;
@@ -8,12 +9,15 @@ import org.bukkit.configuration.ConfigurationSection;
 public interface ISlot
 {
     IStock getStock();
+    default IContainer getContainer(){return getStock()==null?null:getStock().getContainer();};
     Coord getCoord();
 
     Coord getSourceCoord();
     void setSourceCoord(Coord source);
     ISlotItem getItem();
     void setItem(ISlotItem item);
+    GPartStyle getGUIStyle();
+    void setGUIStyle(GPartStyle guiStyle);
 
     /**
      * 只返回是否含有物品 不判断作为占位的情况

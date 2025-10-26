@@ -12,12 +12,9 @@ public class BRLibBridge
         instance = this;
     }
 
-    private boolean init = false;
-    public BRLibBridge init()
-    {
-        if (init) return this;
-        init = true;
 
+    public BRLibBridge onLoad()
+    {
         PlayerModuleManager.instance.registerPreModule(ModuleBackpack.class);
         PlayerModuleManager.instance.registerPreModule(ModuleContainerState.class);
         return this;

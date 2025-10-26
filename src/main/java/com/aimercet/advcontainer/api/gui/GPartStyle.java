@@ -2,10 +2,13 @@ package com.aimercet.advcontainer.api.gui;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.HashMap;
+
 public class GPartStyle implements Cloneable {
 
-    String style;
+    String style = "default";
     int x, y, w, h;
+    final HashMap<String,String> styleData = new HashMap<>();
 
     public GPartStyle() {}
 
@@ -25,6 +28,11 @@ public class GPartStyle implements Cloneable {
         y = section.getInt("y");
         w = section.getInt("w");
         h = section.getInt("h");
+        ConfigurationSection data = section.getConfigurationSection("data");
+        if(data!=null)
+            data.getKeys(false).forEach(key -> {
+                setData(key, data.getString("data."+key));
+            });
     }
 
     @Override
@@ -56,4 +64,8 @@ public class GPartStyle implements Cloneable {
     public GPartStyle setW(int w) {this.w = w;return this;}
     public int getH() {return h;}
     public GPartStyle setH(int h) {this.h = h;return this;}
+    public HashMap<String, String> getStyleData() {return styleData;}
+    public GPartStyle setData(String key, String value) {getStyleData().put(key, value);return this;}
+    public GPartStyle removeData(String key) {getStyleData().remove(key);return this;}
+    public String getData(String key) {return getStyleData().get(key);}
 }

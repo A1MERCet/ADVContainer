@@ -9,7 +9,7 @@ import com.aimercet.advcontainer.util.SizeInt;
 
 public class ContainerEquip extends Container
 {
-    public static final String CLASS_NAME = "EQUIP";
+    public static final String CLASS_NAME = "equip";
     private Backpack backpack;
 
     public ContainerEquip(String uuid)

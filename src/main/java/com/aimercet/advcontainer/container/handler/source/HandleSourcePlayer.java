@@ -1,16 +1,9 @@
-package com.aimercet.advcontainer.bridge.brlib;
+package com.aimercet.advcontainer.container.handler.source;
 
 import com.aimercet.advcontainer.container.ContainerIndex;
-import com.aimercet.advcontainer.container.IContainer;
-import com.aimercet.advcontainer.container.handler.HandleResult;
-import com.aimercet.advcontainer.container.handler.source.IHandleSource;
-import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory;
 import com.aimercet.brlib.player.PlayerState;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 public class HandleSourcePlayer implements IHandleSource
 {
@@ -37,4 +30,5 @@ public class HandleSourcePlayer implements IHandleSource
     @Override public String getHandlerName() {return playerState.getName();}
     @Override public InventoryHandleHistory getInventoryHandleHistory() {return history;}
     @Override public ContainerIndex<String> getAllowedContainers() {return allowedContainers;}
+    @Override public String toString() {return getClass().getSimpleName()+"["+(playerState==null?"null":playerState.name)+"]";}
 }

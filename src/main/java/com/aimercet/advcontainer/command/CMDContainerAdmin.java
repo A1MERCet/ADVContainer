@@ -6,11 +6,14 @@ import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
+import com.aimercet.advcontainer.player.modules.ModuleContainerState;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.Util;
 import com.aimercet.advcontainer.util.UtilCommand;
 import com.aimercet.brlib.command.CMDBasic;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -20,6 +23,23 @@ public class CMDContainerAdmin extends CMDBasic
     public CMDContainerAdmin()
     {
         super("con", CMDContainerAdmin.class);
+    }
+
+    @CommandArgs(
+            describe = "打印玩家所有可交互的容器权限",
+            args = {"player","玩家名","handlers"},
+            types = {ArgType.DEPEND,ArgType.STRING,ArgType.DEPEND}
+    )
+    public void printPlayerAllowContainers(CommandSender sender,String player)
+    {
+        ModuleContainerState module = ModuleContainerState.get(Bukkit.getPlayer(player));
+        if(module==null) {sender.sendMessage("玩家["+player+"]不存在");return;}
+
+        StringBuilder b = new StringBuilder().append("可交互权限(容器ID)["+module.handleSource.getAllowedContainers().size()).append("个]\n");
+
+        module.handleSource.getAllowedContainers().forEach((k,v)->b.append("    - ").append(k).append("\n"));
+
+        sender.sendMessage(b.toString());
     }
 
     @CommandArgs(
@@ -67,6 +87,8 @@ public class CMDContainerAdmin extends CMDBasic
         if(container == null) {sender.sendMessage("容器["+uuid+"]不存在");return;}
 
         StringBuilder b = new StringBuilder().append("容器["+uuid+"]\n");
+        b.append("用户\n");
+        container.getUsers().forEach(e->b.append(" - [").append(e.getClass().getSimpleName()).append("]").append(e.getHandlerName()).append("\n"));
         b.append("库存\n");
         container.getStockList().forEach(stock -> b.append("    [").append(stock.getSize()).append(", Full=").append(stock.isFull()).append(", ItemCount=").append(stock.getItems().size()).append("]\n"));
         b.append("\n");

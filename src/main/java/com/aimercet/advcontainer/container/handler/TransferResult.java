@@ -11,5 +11,5 @@ public class TransferResult
         this.placeResult = placeResult;
     }
 
-
+    @Override public String toString() {return getClass().getSimpleName()+"\n:"+(removeResult==null?"null":removeResult.toString())+"\n:"+(placeResult==null?"null":placeResult.toString());}
 }

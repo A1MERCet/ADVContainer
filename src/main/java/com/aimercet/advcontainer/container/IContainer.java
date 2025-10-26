@@ -1,11 +1,11 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.api.gui.GPartStyle;
-import com.aimercet.advcontainer.api.gui.container.IPartContainer;
 import com.aimercet.advcontainer.container.handler.HandleResult;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
+import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory;
 import com.aimercet.advcontainer.container.source.ISource;
 import com.aimercet.advcontainer.util.Coord;
@@ -20,12 +20,15 @@ public interface IContainer
 
     String getUUID();
     String getClassName();
-    String getDefaultHandler();
+    IContainerHandler getDefaultHandler();
     IContainerHandler getHandler();
+    boolean handlerMissing();
     void setHandler(IContainerHandler handler);
     List<IStock> getStockList();
     ISource getInventorySource();
     GPartStyle getGUIStyle();
+
+    List<IHandleSource> getUsers();
 
     default IContainer setInventorySource(ISource source)
     {
@@ -72,5 +75,4 @@ public interface IContainer
         for (int i = 0; i < getStockList().size(); i++)
             getStockList().get(i).save(section.createSection("Content.Stock"+i));
     }
-    IPartContainer createGUIPart(PlayerState playerState);
 }

@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.container;
 
+import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.util.Coord;
@@ -14,6 +15,7 @@ public class Slot implements ISlot
     public final Coord coord;
     public ISlotItem item;
     private boolean rotate = false;
+    private GPartStyle style = new GPartStyle();
 
     public Slot(IStock stock,Coord coord)
     {
@@ -44,6 +46,9 @@ public class Slot implements ISlot
 
     @Override public ISlotItem getItem() {return item;}
     @Override public void setItem(ISlotItem item) {this.item = item;}
+    @Override public GPartStyle getGUIStyle() {return style;}
+    @Override public void setGUIStyle(GPartStyle guiStyle) {this.style = guiStyle;}
+
     @Override public boolean isRotate() {return rotate;}
     @Override public void setRotate(boolean rotate) {this.rotate=rotate;}
 

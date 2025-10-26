@@ -1,7 +1,6 @@
 package com.aimercet.advcontainer;
 
 import com.aimercet.advcontainer.api.ContainerAPI;
-import com.aimercet.advcontainer.api.gui.ContainerGUIManager;
 import com.aimercet.advcontainer.bridge.BRLibBridge;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.bridge.minecraft.event.PlayerEventContainer;
@@ -37,24 +36,22 @@ public final class ADVContainer extends JavaPlugin {
     public BRLibBridge libBridge;
 
     public ContainerAPI containerAPI;
-    public ContainerGUIManager  containerGUIManager;
 
     @Override
     public void onLoad()
     {
         super.onLoad();
+        libBridge = new BRLibBridge().onLoad();
     }
 
     @Override
     public void onEnable()
     {
         super.onEnable();
-        libBridge = new BRLibBridge().init();
         itemManager = new ItemManager();
         containerManager = new ContainerManager();
         lootManager = new LootManager();
         containerAPI = new ContainerAPI();
-        containerGUIManager = new ContainerGUIManager();
 
         registerCMD();
         registerEvent();

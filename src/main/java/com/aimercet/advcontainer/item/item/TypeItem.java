@@ -49,7 +49,6 @@ public class TypeItem
     {
         return defaultSize;
     }
-    public SizeInt getSize() {return defaultSize;}
 
     public boolean hasDuration(){return maxDuration>0F;}
 
@@ -81,5 +80,5 @@ public class TypeItem
     public SizeInt getDefaultSize()     {return defaultSize;}
     public LootItem getDefaultLoot()    {return loot.clone();}
 
-    @Override public String toString() {return getClass().getSimpleName()+"[ID="+getID()+", Type:"+type+", "+getSize()+"]";}
+    @Override public String toString() {return getClass().getSimpleName()+"[ID="+getID()+", Type:"+type+", "+getDefaultSize()+"]";}
 }

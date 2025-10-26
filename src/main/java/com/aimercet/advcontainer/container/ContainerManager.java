@@ -82,6 +82,8 @@ public class ContainerManager
         sourceSystem = new SourceSystem();
         handlerGeneral = new ContainerHandlerGeneral();
         handlerEquipment = new ContainerHandlerEquipment();
+        registerHandler(handlerGeneral);
+        registerHandler(handlerEquipment);
 
         registerHandler(handlerGeneral);
         registerHandler(handlerEquipment);

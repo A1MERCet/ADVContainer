@@ -49,7 +49,7 @@ public class PlaceResult extends HandleResult
 
     @Override
     public String toString() {
-        String s = super.toString().replace("HandleResult","PlaceResult").replace("]","");
+        String s = super.toString().replace("HandleResult","PlaceResult ").replace("]","");
         return s+", Source: "+source+", Rotate: "+rotate+"]";
     }
 }

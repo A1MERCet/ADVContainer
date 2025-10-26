@@ -1,6 +1,7 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.container.backpack.equipment.ContainerEquip;
+import com.aimercet.brlib.log.Logger;
 import com.aimercet.brlib.util.MapBuilder;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class ContainerFactory
             IContainer c = f.create(clzName, uuid);
             if(c!=null) return c;
         }
+        Logger.warn("没有在注册表中找到类型为["+clzName+"]的容器");
         return null;
     }
 

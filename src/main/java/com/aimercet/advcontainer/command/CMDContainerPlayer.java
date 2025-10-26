@@ -1,5 +1,7 @@
 package com.aimercet.advcontainer.command;
 
+import com.aimercet.advcontainer.api.ContainerAPI;
+import com.aimercet.advcontainer.api.gui.GUIActionState;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
@@ -30,21 +32,70 @@ public class CMDContainerPlayer extends CMDBasic
         super("conp", CMDContainerPlayer.class);
     }
 
+    @CommandArgs(
+            describe = "触发按下槽位逻辑判断(GUI专用)\n只用于GUI内槽位的点击 比如点击槽位A 再点击槽位B 会自动判断槽位A是否有物品及判定和执行A物品转移到B槽位",
+            args = {"trigger","click","容器UUID","库存下标","x","y"},
+            types = {ArgType.DEPEND,ArgType.DEPEND,ArgType.STRING,ArgType.INTEGER,ArgType.INTEGER,ArgType.INTEGER},
+            needOP = false,
+            playerOnly = true
+    )
+    public void triggerClick(CommandSender sender,String uuid,int stockIndex,int x,int y)
+    {
+        ModuleContainerState module = ModuleContainerState.get((Player)sender);
+        if(module == null) return;
 
+        IContainer container = ContainerManager.instance.get(uuid);
+        if(container == null) {info(sender,"容器["+uuid+"]不存在");return;}
+
+        IStock stock = container.getStock(stockIndex);
+        if(stock == null) return;
+
+        ISlot slot = stock.get(x, y);
+        if(slot == null) return;
+        ItemSource target = slot.toSource();
+
+        GUIActionState.Cursor cursor = module.actionState.getCursor();
+
+        if(cursor.getSource()==null){
+            cursor.setSource(target);
+            cursor.setRotate(target.isRotate());
+            Logger.debug("Set cursor source");
+        }else{
+            TransferResult result = ContainerAPI.instance.doPlayerTransfer((Player) sender, cursor.getSource(), target, cursor.isRotate(), true);
+            Logger.debug("TransferResult:"+(result==null?"null":result.toString()));
+        }
+    }
 
     @CommandArgs(
             describe = "重置指针状态",
             args = {"cursor","clear"},
-            types = {ArgType.DEPEND,ArgType.BOOLEAN},
+            types = {ArgType.DEPEND,ArgType.DEPEND},
             needOP = false
     )
-    public void resetCursor(CommandSender sender,boolean rotate)
+    public void resetCursor(CommandSender sender)
     {
         if(!(sender instanceof Player)) return;
         ModuleContainerState module = ModuleContainerState.get((Player)sender);
         if(module == null) return;
 
         module.actionState.getCursor().clear();
+        Logger.debug("Reset cursor");
+    }
+
+    @CommandArgs(
+            describe = "旋转当前指针物品",
+            args = {"cursor","rotate"},
+            types = {ArgType.DEPEND,ArgType.DEPEND},
+            needOP = false
+    )
+    public void cursorRotate(CommandSender sender)
+    {
+        if(!(sender instanceof Player)) return;
+        ModuleContainerState module = ModuleContainerState.get((Player)sender);
+        if(module == null) return;
+
+        module.actionState.getCursor().setRotate(!module.actionState.getCursor().isRotate());
+        Logger.debug("Set cursor rotate: "+module.actionState.getCursor().isRotate());
     }
 
     @CommandArgs(

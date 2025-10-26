@@ -18,7 +18,7 @@ public class ContainerHandlerEquipment implements IContainerHandler {
         this.id = "equipment";
     }
 
-    @Override public SizeInt getItemSize(ISlotItem item, ItemSource coord, boolean rotate) {return new SizeInt(1,1);}
+    @Override public SizeInt getItemSize(ISlotItem item, boolean rotate) {return new SizeInt(1,1);}
 
     @Override
     public void onPlace(PlaceResult result)

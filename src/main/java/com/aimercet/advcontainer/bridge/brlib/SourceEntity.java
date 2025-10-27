@@ -13,9 +13,8 @@ public class SourceEntity implements ISource
     public SourceEntity(Entity entity)
     {
         this.entity = entity;
-        this.inventorySourceID = "entity."+entity.getName();
-        String lang = "container.source."+entity.getName();
-        this.inventorySourceLang = Localization.has(lang)?lang:Localization.register(lang,entity.getName());
+        this.inventorySourceID = "entity_"+entity.getName();
+        this.inventorySourceLang = Localization.has(inventorySourceID)?inventorySourceID:Localization.register(inventorySourceID,entity.getName());
     }
 
     @Override public String getSourceID() {return inventorySourceID;}

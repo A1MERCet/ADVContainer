@@ -22,6 +22,7 @@ public class DataItem
 
     public int stock;
     public String container;
+    public HashMap<String,String> customData = new HashMap<>();
 
     public DataItem() {
     }
@@ -55,7 +56,9 @@ public class DataItem
     public String getContainer() {return container;}
     public DataItem setContainer(String container) {this.container = container;return this;}
     public String toJson() {return new Gson().toJson(this);}
-
+    public HashMap<String, String> getCustomData() {return customData;}
+    public DataItem setCustomData(HashMap<String, String> customData) {this.customData = customData;return this;}
+    public DataItem addCustomData(String k,String v){customData.put(k,v);return this;}
     public HashMap<String,String> toMap()
     {
         HashMap<String,String> map = new HashMap<>();
@@ -66,7 +69,7 @@ public class DataItem
                 Object value = field.get(this);
                 map.put(field.getName(), value==null?"":value.toString());
             } catch (IllegalAccessException e) {e.printStackTrace();}
-
+        customData.forEach((k,v)->map.put("custom_"+k,v));
         return map;
     }
 

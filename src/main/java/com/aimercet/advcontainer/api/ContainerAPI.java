@@ -5,7 +5,6 @@ import com.aimercet.advcontainer.api.gui.data.DataContainer;
 import com.aimercet.advcontainer.api.gui.data.DataItem;
 import com.aimercet.advcontainer.api.gui.data.DataSlot;
 import com.aimercet.advcontainer.api.gui.data.DataStock;
-import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.IStock;
@@ -17,7 +16,6 @@ import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.player.modules.ModuleContainerState;
-import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.entity.Player;
@@ -93,7 +91,7 @@ public class ContainerAPI
         return module.actionState;
     }
 
-    public GUIActionState.Cursor getPlayerClick(Player player)
+    public GUIActionState.Cursor getCursor(Player player)
     {
         ModuleContainerState module = ModuleContainerState.get(player);
         if(module==null)return null;
@@ -105,10 +103,10 @@ public class ContainerAPI
     {
         if(player==null || slot==null)return false;
 
-        ModuleContainerState module = ModuleContainerState.get(player);
-        if(module==null)return false;
+        GUIActionState.Cursor cursor = getCursor(player);
+        if(cursor==null)return false;
 
-        module.actionState.getCursor().set(new ItemSource(slot.getStock(), slot.getCoord()),rotate);
+        cursor.set(new ItemSource(slot.getStock(), slot.getCoord()),rotate);
 
         return true;
     }

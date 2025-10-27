@@ -2,8 +2,10 @@ package com.aimercet.advcontainer;
 
 import com.aimercet.advcontainer.api.ContainerAPI;
 import com.aimercet.advcontainer.bridge.BRLibBridge;
+import com.aimercet.advcontainer.bridge.minecraft.InventoryWatcher;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.bridge.minecraft.event.PlayerEventContainer;
+import com.aimercet.advcontainer.bridge.protocollib.ProtocolLibManager;
 import com.aimercet.advcontainer.command.CMDContainerAdmin;
 import com.aimercet.advcontainer.command.CMDContainerPlayer;
 import com.aimercet.advcontainer.command.CMDItem;
@@ -24,15 +26,19 @@ import java.util.UUID;
 
 public final class ADVContainer extends JavaPlugin {
 
+    public static ADVContainer instance;
+
     public CMDContainerAdmin cmdContainerAdmin;
     public CMDContainerPlayer cmdContainerPlayer;
     public CMDItem cmdItem;
 
+    ProtocolLibManager protocolLibManager;
     public ItemManager itemManager;
     public ContainerManager containerManager;
     public LootManager lootManager;
 
     public LootRunnable lootRunnable;
+    public InventoryWatcher inventoryWatcher;
     public BRLibBridge libBridge;
 
     public ContainerAPI containerAPI;
@@ -48,6 +54,8 @@ public final class ADVContainer extends JavaPlugin {
     public void onEnable()
     {
         super.onEnable();
+        instance = this;
+        protocolLibManager = new ProtocolLibManager();
         itemManager = new ItemManager();
         containerManager = new ContainerManager();
         lootManager = new LootManager();
@@ -59,6 +67,8 @@ public final class ADVContainer extends JavaPlugin {
         lootRunnable =  new LootRunnable();
         lootRunnable.runTaskTimerAsynchronously(this,0L,1L);
 
+        inventoryWatcher =  new InventoryWatcher();
+        inventoryWatcher.runTaskTimer(this,0L,1L);
 
         ContainerTemplate t1 = new ContainerTemplate().addStock(new SizeInt(4,4));
         ContainerTemplate t2 = new ContainerTemplate().addStock(new SizeInt(6,8));

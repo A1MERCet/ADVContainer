@@ -1,10 +1,7 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.api.gui.GPartStyle;
-import com.aimercet.advcontainer.container.handler.HandleResult;
-import com.aimercet.advcontainer.container.handler.IContainerHandler;
-import com.aimercet.advcontainer.container.handler.PlaceResult;
-import com.aimercet.advcontainer.container.handler.RemoveResult;
+import com.aimercet.advcontainer.container.handler.*;
 import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory;
 import com.aimercet.advcontainer.container.source.ISource;
@@ -13,6 +10,7 @@ import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.brlib.player.PlayerState;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IContainer
@@ -30,6 +28,8 @@ public interface IContainer
 
     List<IHandleSource> getUsers();
 
+    void initContainer();
+
     default IContainer setInventorySource(ISource source)
     {
         ContainerManager.updateCache(this);
@@ -41,9 +41,8 @@ public interface IContainer
         getInventoryHandleHistory().add(result);
     }
 
-    default IStock addStock(SizeInt size){IStock s = createStock(size);getStockList().add(s);return s;}
-    default IStock createStock(SizeInt size){return new Stock(this).setSize(size);}
-    default ISlot createSlot(IStock stock, Coord coord){return new Slot(stock, coord);}
+    default IStock createStock(){return new Stock(this);}
+    default ISlot  createSlot(IStock stock, Coord coord){return new Slot(stock, coord);}
 
     default boolean isFull()
     {
@@ -55,6 +54,31 @@ public interface IContainer
     {
         if(index < 0 || index >= getStockList().size()) return null;
         return getStockList().get(index);
+    }
+
+    default List<ItemSource> getItems()
+    {
+        List<ItemSource> list = new ArrayList<>();
+
+        for (IStock stock : getStockList())
+            list.addAll(stock.getItems());
+
+        return list;
+    }
+
+    default List<ISlot> getSlots()
+    {
+        List<ISlot> list = new ArrayList<>();
+
+        for (IStock stock : getStockList())
+        {
+            ISlot[][] slots = stock.getSlots();
+            for (int i = 0; i < slots.length; i++)
+                for (int j = 0; j < slots[i].length; j++)
+                    list.add(slots[i][j]);
+        }
+
+        return list;
     }
 
     default void onPlace(PlaceResult result){}

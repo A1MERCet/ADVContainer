@@ -14,17 +14,17 @@ public class ModuleBackpack extends PlayerModule
 
     public static String MODULE_NAME = "backpack";
 
-    public final Backpack backpack;
+    public Backpack backpack;
     protected ModuleBackpack(PlayerState playerState)
     {
         super(MODULE_NAME, playerState, true);
-        backpack = new Backpack(SourcePlayer.fromPlayer(playerState));
     }
 
     @Override
     public void onRegister()
     {
         super.onRegister();
+        backpack = new Backpack(SourcePlayer.fromPlayer(playerState));
     }
 
     @Override

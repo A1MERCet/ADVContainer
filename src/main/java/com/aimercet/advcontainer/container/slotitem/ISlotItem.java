@@ -12,6 +12,7 @@ public interface ISlotItem
     String getSlotItemID();
     String getSlotItemLang();
     SizeInt getSize();
+    String getContainer();
 
     void load(ConfigurationSection section);
     void save(ConfigurationSection section);

@@ -4,6 +4,7 @@ import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.util.SizeInt;
+import com.aimercet.brlib.log.Logger;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,6 +18,10 @@ public class SlotItemStack implements ISlotItem
     {
         this.item = item;
         this.typeItem = ItemManager.Get(item);
+        if(typeItem == null){
+            Logger.error("没有找到对应["+(item==null?"null":item.getType().name())+"]的物品配置");
+            throw new NullPointerException();
+        }
     }
 
     public ItemStack getItemStack() {return item;}
@@ -33,6 +38,8 @@ public class SlotItemStack implements ISlotItem
         TypeItem typeItem = ItemManager.Get(item.getType().name());
         return typeItem==null?null:typeItem.getSize(item);
     }
+
+    @Override public String getContainer() {return ItemManager.getContainer(item);}
 
     @Override
     public void load(ConfigurationSection section)

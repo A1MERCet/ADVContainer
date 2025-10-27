@@ -5,6 +5,7 @@ import com.aimercet.advcontainer.container.handler.ContainerHandlerGeneral;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
 import com.aimercet.advcontainer.container.handler.source.HandleSourceConfig;
 import com.aimercet.advcontainer.container.handler.source.HandleSourceSystem;
+import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.container.source.*;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.brlib.Options;
@@ -124,15 +125,6 @@ public class ContainerManager
         return container!=null;
     }
 
-    public IContainer getFromItem(ItemStack isk,boolean loadFromFile)
-    {
-        if(isk==null)return null;
-        String uuid = ItemManager.getContainer(isk);
-        IContainer container = get(uuid);
-        if(loadFromFile && container==null) container = loadContainer(uuid);
-        return container;
-    }
-
     public ItemStack bindToItem(ItemStack isk,IContainer container)
     {
         if(isk==null || container==null)return null;
@@ -141,12 +133,12 @@ public class ContainerManager
         return isk;
     }
 
-    public IContainer loadContainer(ItemStack isk)
+    public IContainer loadContainer(ISlotItem item)
     {
-        if(isk==null)return null;
-        String uuid = ItemManager.getContainer(isk);
+        if(item==null)return null;
+        String uuid = item.getContainer();
         IContainer container = loadContainer(uuid);
-        if(container!=null) container.setInventorySource(new SourceItemStack(isk));
+        if(container!=null) container.setInventorySource(new SourceSlotItem(item));
         return container;
     }
 
@@ -181,6 +173,7 @@ public class ContainerManager
 
         Logger.info("加载容器["+cfgClz+" - "+uuid+"]");
         IContainer container = ContainerFactory.Create(cfgClz, uuid);
+        container.initContainer();
         container.load(section);
         return container;
     }

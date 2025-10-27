@@ -26,7 +26,7 @@ public class Container implements IContainer
 
     private GPartStyle guiStyle = new GPartStyle();
 
-    public Container(String uuid)
+    protected Container(String uuid)
     {
         this.uuid = uuid;
         ContainerManager.instance.register(this);
@@ -46,6 +46,12 @@ public class Container implements IContainer
     @Override public String getClassName()                                  {return CLASS_NAME;}
     @Override public boolean handlerMissing()                               {return this.handler==null;}
     @Override public List<IHandleSource> getUsers()                         {return users;}
+
+    @Override
+    public void initContainer()
+    {
+
+    }
 
     @Override
     public String toString() {

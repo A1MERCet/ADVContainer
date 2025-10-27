@@ -26,6 +26,13 @@ public class PlaceResult extends HandleResult
     public final ItemSource source;
     public final boolean rotate;
 
+    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type)
+    {
+        super(handleSource,type,null,item);
+        this.source = null;
+        this.rotate = false;
+    }
+
     public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource source, ItemSource target,boolean rotate)
     {
         super(handleSource,type,target,item);

@@ -2,25 +2,17 @@ package com.aimercet.advcontainer.command;
 
 import com.aimercet.advcontainer.api.ContainerAPI;
 import com.aimercet.advcontainer.api.gui.GUIActionState;
-import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.handler.*;
-import com.aimercet.advcontainer.container.handler.source.IHandleSource;
-import com.aimercet.advcontainer.item.ItemManager;
-import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.player.modules.ModuleContainerState;
-import com.aimercet.advcontainer.util.Coord;
-import com.aimercet.advcontainer.util.Util;
-import com.aimercet.advcontainer.util.UtilCommand;
 import com.aimercet.brlib.command.CMDBasic;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class CMDContainerPlayer extends CMDBasic
@@ -41,9 +33,6 @@ public class CMDContainerPlayer extends CMDBasic
     )
     public void triggerClick(CommandSender sender,String uuid,int stockIndex,int x,int y)
     {
-        ModuleContainerState module = ModuleContainerState.get((Player)sender);
-        if(module == null) return;
-
         IContainer container = ContainerManager.instance.get(uuid);
         if(container == null) {info(sender,"容器["+uuid+"]不存在");return;}
 
@@ -54,7 +43,7 @@ public class CMDContainerPlayer extends CMDBasic
         if(slot == null) return;
         ItemSource target = slot.toSource();
 
-        GUIActionState.Cursor cursor = module.actionState.getCursor();
+        GUIActionState.Cursor cursor = ContainerAPI.instance.getCursor((Player)sender);
 
         if(cursor.getSource()==null){
             cursor.setSource(target);
@@ -70,7 +59,8 @@ public class CMDContainerPlayer extends CMDBasic
             describe = "重置指针状态",
             args = {"cursor","clear"},
             types = {ArgType.DEPEND,ArgType.DEPEND},
-            needOP = false
+            needOP = false,
+            playerOnly = true
     )
     public void resetCursor(CommandSender sender)
     {
@@ -86,44 +76,46 @@ public class CMDContainerPlayer extends CMDBasic
             describe = "旋转当前指针物品",
             args = {"cursor","rotate"},
             types = {ArgType.DEPEND,ArgType.DEPEND},
-            needOP = false
+            needOP = false,
+            playerOnly = true
     )
     public void cursorRotate(CommandSender sender)
     {
         if(!(sender instanceof Player)) return;
-        ModuleContainerState module = ModuleContainerState.get((Player)sender);
-        if(module == null) return;
+        GUIActionState.Cursor cursor = ContainerAPI.instance.getCursor((Player) sender);
+        if(cursor == null) return;
 
-        module.actionState.getCursor().setRotate(!module.actionState.getCursor().isRotate());
-        Logger.debug("Set cursor rotate: "+module.actionState.getCursor().isRotate());
+        cursor.setRotate(!cursor.isRotate());
     }
 
     @CommandArgs(
             describe = "设置当前指针物品的旋转",
             args = {"cursor","rotate","[true/false]"},
             types = {ArgType.DEPEND,ArgType.DEPEND,ArgType.BOOLEAN},
-            needOP = false
+            needOP = false,
+            playerOnly = true
     )
     public void setCursorRotate(CommandSender sender,boolean rotate)
     {
         if(!(sender instanceof Player)) return;
-        ModuleContainerState module = ModuleContainerState.get((Player)sender);
-        if(module == null) return;
+        GUIActionState.Cursor cursor = ContainerAPI.instance.getCursor((Player) sender);
+        if(cursor == null) return;
 
-        module.actionState.getCursor().setRotate(rotate);
+        cursor.setRotate(rotate);
     }
 
     @CommandArgs(
             describe = "设置当前指针的物品",
             args = {"cursor","click","容器UUID","库存下标","x","y"},
             types = {ArgType.DEPEND,ArgType.DEPEND,ArgType.STRING,ArgType.INTEGER,ArgType.INTEGER,ArgType.INTEGER},
-            needOP = false
+            needOP = false,
+            playerOnly = true
     )
     public void setCursor(CommandSender sender,String uuid,int stockIndex,int x,int y)
     {
         if(!(sender instanceof Player)) return;
-        ModuleContainerState module = ModuleContainerState.get((Player)sender);
-        if(module == null) return;
+        GUIActionState.Cursor cursor = ContainerAPI.instance.getCursor((Player) sender);
+        if(cursor==null)return;
 
         IContainer container = ContainerManager.instance.get(uuid);
         if(container == null) {info(sender,"容器["+uuid+"]不存在");return;}
@@ -134,7 +126,7 @@ public class CMDContainerPlayer extends CMDBasic
         ISlot slot = stock.get(x, y);
         if(slot == null) return;
 
-        module.actionState.getCursor().setSource(new ItemSource(stock,slot.getCoord()));
+        cursor.setSource(new ItemSource(stock,slot.getCoord()));
 
     }
 

@@ -18,6 +18,12 @@ public class Stock implements IStock
         this.checker = new Checker().allow(ItemType.values);
     }
 
+    @Override
+    public void initStock()
+    {
+    }
+
+
     @Override public IChecker getChecker() {return checker;}
     @Override public void setChecker(IChecker c) {this.checker = c;}
 

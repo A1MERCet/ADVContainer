@@ -24,6 +24,8 @@ public interface IStock
     GPartStyle getGUIStyle();
     void setGUIStyle(GPartStyle guiStyle);
 
+    void initStock();
+
     default void save(ConfigurationSection section)
     {
         for (int y = 0; y < getSizeY(); y++)

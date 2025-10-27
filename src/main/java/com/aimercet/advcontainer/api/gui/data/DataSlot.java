@@ -10,6 +10,7 @@ public class DataSlot
     public int x;
     public int y;
     public String style;
+    public HashMap<String,String> customData = new HashMap<>();
 
     public DataSlot() {}
 
@@ -24,7 +25,9 @@ public class DataSlot
     public DataSlot setY(int y) {this.y = y;return this;}
     public String getStyle() {return style;}
     public DataSlot setStyle(String style) {this.style = style;return this;}
-
+    public HashMap<String, String> getCustomData() {return customData;}
+    public DataSlot setCustomData(HashMap<String, String> customData) {this.customData = customData;return this;}
+    public DataSlot addCustomData(String k,String v){customData.put(k,v);return this;}
     public HashMap<String,String> toMap()
     {
         HashMap<String,String> map = new HashMap<>();
@@ -35,7 +38,7 @@ public class DataSlot
                 Object value = field.get(this);
                 map.put(field.getName(), value==null?"":value.toString());
             } catch (IllegalAccessException e) {e.printStackTrace();}
-
+        customData.forEach((k,v)->map.put("custom_"+k,v));
         return map;
     }
 

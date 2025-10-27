@@ -1,12 +1,9 @@
 package com.aimercet.advcontainer.container.backpack.equipment;
 
-import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
-import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.Slot;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
-import com.aimercet.advcontainer.container.source.SourceEquipSlot;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.brlib.log.Logger;
 
@@ -25,13 +22,8 @@ public class SlotEquip extends Slot
     @Override
     public void setItem(ISlotItem item)
     {
-        super.setItem(item);
         if(equipType == null) Logger.warn("EquipType is null["+toString()+"]");
-
-        if(item instanceof SlotItemStack) {
-            containerEquip = ContainerManager.instance.loadContainer(((SlotItemStack) item).getItemStack());
-            if(containerEquip != null) containerEquip.setInventorySource(new SourceEquipSlot(this));
-        }
+        super.setItem(item);
     }
 
     public StockEquip getStockEquip() {return stockEquip;}

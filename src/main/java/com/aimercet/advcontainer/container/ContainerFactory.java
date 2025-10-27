@@ -4,6 +4,7 @@ import com.aimercet.advcontainer.container.backpack.equipment.ContainerEquip;
 import com.aimercet.brlib.log.Logger;
 import com.aimercet.brlib.util.MapBuilder;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +41,15 @@ public class ContainerFactory
     {
         Class<? extends IContainer> clz = loadClasses.get(clzName);
 
-        switch (clzName){
-            case Container.CLASS_NAME:   return new Container(uuid);
-            case ContainerEquip.CLASS_NAME: return new ContainerEquip(uuid);
-        }
+        try {
+            switch (clzName){
+                default:{
+                    Constructor<? extends IContainer> constructor = clz.getDeclaredConstructor(String.class);
+                    constructor.setAccessible(true);
+                    return constructor.newInstance(uuid);
+                }
+            }
+        }catch (Exception e){Logger.error("创建类型为["+clzName+"]的容器失败");e.printStackTrace();}
         return null;
     }
 }

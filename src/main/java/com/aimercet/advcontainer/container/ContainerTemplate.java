@@ -51,11 +51,16 @@ public class ContainerTemplate
         IContainer container = ContainerFactory.Create(clzName,uuid);
         for (StockTemplate s : stockTemplateList)
         {
-            IStock stock = container.addStock(s.size);
+            IStock stock = container.createStock().setSize(s.size);
             stock.setGUIStyle(s.style.clone());
+
+            container.getStockList().add(stock);
+
+            stock.initStock();
         }
 
         if(handler != null)container.setHandler(handler);
+        container.initContainer();
         return container;
     }
 

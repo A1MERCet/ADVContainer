@@ -4,8 +4,9 @@ import com.aimercet.advcontainer.container.ContainerIndex;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.handler.HandleResult;
+import com.aimercet.advcontainer.container.source.ISource;
 
-public interface IHandleSource
+public interface IHandleSource extends ISource
 {
     String getHandlerName();
     InventoryHandleHistory getInventoryHandleHistory();
@@ -35,4 +36,7 @@ public interface IHandleSource
     }
 
     default boolean canHandle(IContainer container){return getAllowedContainers().containsValue(container);}
+
+    @Override default String getSourceID(){return getHandlerName();}
+    @Override default String getSourceLang(){return getHandlerName();}
 }

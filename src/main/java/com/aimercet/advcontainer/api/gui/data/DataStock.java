@@ -3,6 +3,8 @@ package com.aimercet.advcontainer.api.gui.data;
 import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+
 public class DataStock
 {
     private String container;
@@ -13,6 +15,7 @@ public class DataStock
     public int styleY;
     public int w;
     public int h;
+    public HashMap<String,String> customData = new HashMap<>();
 
     public DataStock()
     {
@@ -42,7 +45,9 @@ public class DataStock
     public DataStock setIndex(int index) {this.index = index;return this;}
     public String getContainer() {return container;}
     public DataStock setContainer(String container) {this.container = container;return this;}
-
+    public HashMap<String, String> getCustomData() {return customData;}
+    public DataStock setCustomData(HashMap<String, String> customData) {this.customData = customData;return this;}
+    public DataStock addCustomData(String k,String v){customData.put(k,v);return this;}
     public String getStyle() {return style;}
     public DataStock setStyle(String style) {this.style = style;return this;}
     public int getStyleX() {return styleX;}

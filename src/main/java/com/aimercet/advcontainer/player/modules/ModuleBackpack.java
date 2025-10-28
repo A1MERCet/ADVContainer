@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.player.modules;
 
-import com.aimercet.advcontainer.bridge.brlib.SourcePlayer;
 import com.aimercet.advcontainer.container.backpack.Backpack;
+import com.aimercet.advcontainer.container.handler.source.HandleSourcePlayer;
 import com.aimercet.brlib.player.PlayerManager;
 import com.aimercet.brlib.player.PlayerModule;
 import com.aimercet.brlib.player.PlayerState;
@@ -24,7 +24,8 @@ public class ModuleBackpack extends PlayerModule
     public void onRegister()
     {
         super.onRegister();
-        backpack = new Backpack(SourcePlayer.fromPlayer(playerState));
+
+        backpack = new Backpack(HandleSourcePlayer.fromPlayer(playerState));
     }
 
     @Override

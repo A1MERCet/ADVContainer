@@ -1,9 +1,9 @@
 package com.aimercet.advcontainer.util;
 
 import com.aimercet.advcontainer.container.IStock;
-import com.aimercet.advcontainer.container.handler.ItemSource;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 
-public class Coord
+public class Coord implements Cloneable
 {
     public final int x;
     public final int y;
@@ -14,15 +14,17 @@ public class Coord
         this.y = y;
     }
 
-    public ItemSource toSrouce(IStock stock)
+    public SlotSource toSource(IStock stock)
     {
-        return new ItemSource(stock,this);
+        return new SlotSource(stock.getContainer(),stock.getIndex(),this);
     }
 
     @Override
-    public String toString() {
-        return "["+x+","+y+"]";
+    public Coord clone() {
+        return new Coord(x,y);
     }
+
+    @Override public String toString() {return "["+x+","+y+"]";}
 
     @Override
     public boolean equals(Object obj)

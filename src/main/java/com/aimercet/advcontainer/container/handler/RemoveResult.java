@@ -11,7 +11,7 @@ public class RemoveResult extends HandleResult
     }
 
 
-    public RemoveResult(IHandleSource handleSource, ISlotItem item,Type type, ItemSource coord)
+    public RemoveResult(IHandleSource handleSource, ISlotItem item,Type type, SlotSource coord)
     {
         super(handleSource,type,coord,item);
     }

@@ -9,7 +9,8 @@ import java.util.List;
 
 public class EquipType
 {
-    public static List<EquipType> values = new ArrayList<EquipType>();
+    private static List<EquipType> values = new ArrayList<EquipType>();
+    public static List<EquipType> values(){return new ArrayList<EquipType>(values);}
     public static HashMap<String, EquipType> map = new HashMap<String, EquipType>();
 
     public static EquipType valueOf(String id){return map.get(id);}

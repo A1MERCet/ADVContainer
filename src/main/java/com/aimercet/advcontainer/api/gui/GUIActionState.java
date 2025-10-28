@@ -1,12 +1,12 @@
 package com.aimercet.advcontainer.api.gui;
 
-import com.aimercet.advcontainer.container.handler.ItemSource;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 
 public class GUIActionState
 {
     public class Cursor
     {
-        private ItemSource source;
+        private SlotSource source;
         private boolean rotate;
 
         public Cursor()
@@ -14,9 +14,9 @@ public class GUIActionState
 
         }
 
-        public ItemSource getSource() {return source;}
-        public Cursor setSource(ItemSource source) {this.source = source;return this;}
-        public Cursor set(ItemSource source,boolean rotate) {setSource(source);setRotate(rotate);return this;}
+        public SlotSource getSource() {return source;}
+        public Cursor setSource(SlotSource source) {this.source = source;return this;}
+        public Cursor set(SlotSource source, boolean rotate) {setSource(source);setRotate(rotate);return this;}
         public boolean isRotate() {return rotate;}
         public Cursor setRotate(boolean rotate) {this.rotate = rotate;return this;}
         public Cursor clear(){

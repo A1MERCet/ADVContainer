@@ -13,7 +13,6 @@ import com.aimercet.advcontainer.util.UtilCommand;
 import com.aimercet.brlib.command.CMDBasic;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -125,7 +124,7 @@ public class CMDContainerAdmin extends CMDBasic
         if(container == null) {sender.sendMessage("容器["+uuid+"]不存在");return;}
 
         if(stock<0 || stock>=container.getStockList().size()) {sender.sendMessage("库存下标["+stock+"]超出索引范围");return;}
-        RemoveResult remove = container.getHandler().remove(handleSource, new ItemSource(container.getStockList().get(stock), new Coord(x, y)));
+        RemoveResult remove = container.getHandler().remove(handleSource, new SlotSource(container.getStockList().get(stock), new Coord(x, y)));
         sender.sendMessage("操作结果: "+remove);
     }
 
@@ -151,10 +150,10 @@ public class CMDContainerAdmin extends CMDBasic
         IStock stock1 = container1.getStockList().get(stock1index);
         IStock stock2 = container2.getStockList().get(stock2index);
 
-        RemoveResult result1 = container1.getHandler().remove(handleSource, new ItemSource(stock1, new Coord(x1, y1)));
+        RemoveResult result1 = container1.getHandler().remove(handleSource, new SlotSource(stock1, new Coord(x1, y1)));
         if(result1.type!=RemoveResult.Type.SUCCESS){sender.sendMessage("操作失败: "+result1);return;}
 
-        RemoveResult result2 = container2.getHandler().remove(handleSource, new ItemSource(stock2, new Coord(x2, y2)));
+        RemoveResult result2 = container2.getHandler().remove(handleSource, new SlotSource(stock2, new Coord(x2, y2)));
         if(result2.type!=RemoveResult.Type.SUCCESS){sender.sendMessage("操作失败: "+result2);return;}
 
         sender.sendMessage("操作结果: \n"+result1+"\n"+result2);
@@ -185,7 +184,7 @@ public class CMDContainerAdmin extends CMDBasic
         } else {
             Coord coord = new Coord(x, y);
             if(coord.x<0 || coord.y<0){sender.sendMessage("坐标["+coord+"]超出索引范围");return;}
-            place = container.getHandler().place(handleSource, slotItemStack, new ItemSource(container.getStockList().get(stock),coord),rotate);
+            place = container.getHandler().place(handleSource, slotItemStack, new SlotSource(container.getStockList().get(stock),coord),rotate);
         }
 
         sender.sendMessage("操作结果: "+place);

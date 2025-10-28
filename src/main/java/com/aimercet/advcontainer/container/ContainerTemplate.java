@@ -52,7 +52,6 @@ public class ContainerTemplate
         for (StockTemplate s : stockTemplateList)
         {
             IStock stock = container.createStock().setSize(s.size);
-            stock.setGUIStyle(s.style.clone());
 
             container.getStockList().add(stock);
 
@@ -61,6 +60,7 @@ public class ContainerTemplate
 
         if(handler != null)container.setHandler(handler);
         container.initContainer();
+        ContainerManager.instance.register(container);
         return container;
     }
 

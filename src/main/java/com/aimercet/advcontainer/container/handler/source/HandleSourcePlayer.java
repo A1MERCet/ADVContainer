@@ -21,7 +21,7 @@ public class HandleSourcePlayer implements IHandleSource
     public final InventoryHandleHistory history;
     public final ContainerIndex<String> allowedContainers = new ContainerIndex<String>();
 
-    public HandleSourcePlayer(PlayerState playerState)
+    private HandleSourcePlayer(PlayerState playerState)
     {
         if(playerState == null) throw new NullPointerException("PlayerState is null");
         this.playerState = playerState;

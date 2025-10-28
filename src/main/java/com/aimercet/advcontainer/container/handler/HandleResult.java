@@ -12,11 +12,11 @@ public class HandleResult
     public String uuid;
     public final IHandleSource handleSource;
     public final Enum<?> type;
-    public final ItemSource coord;
+    public final SlotSource coord;
     public final ISlotItem item;
     public final Date date;
 
-    public HandleResult(IHandleSource handleSource ,Enum<?> type, ItemSource coord, ISlotItem item)
+    public HandleResult(IHandleSource handleSource , Enum<?> type, SlotSource coord, ISlotItem item)
     {
         this.uuid = UUID.randomUUID().toString();
         this.handleSource = handleSource;

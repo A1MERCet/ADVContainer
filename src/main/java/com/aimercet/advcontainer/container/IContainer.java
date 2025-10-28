@@ -6,8 +6,6 @@ import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.container.handler.source.InventoryHandleHistory;
 import com.aimercet.advcontainer.container.source.ISource;
 import com.aimercet.advcontainer.util.Coord;
-import com.aimercet.advcontainer.util.SizeInt;
-import com.aimercet.brlib.player.PlayerState;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -56,9 +54,9 @@ public interface IContainer
         return getStockList().get(index);
     }
 
-    default List<ItemSource> getItems()
+    default List<SlotSource> getItems()
     {
-        List<ItemSource> list = new ArrayList<>();
+        List<SlotSource> list = new ArrayList<>();
 
         for (IStock stock : getStockList())
             list.addAll(stock.getItems());

@@ -23,7 +23,7 @@ public class PlaceResult extends HandleResult
 
     }
 
-    public final ItemSource source;
+    public final SlotSource source;
     public final boolean rotate;
 
     public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type)
@@ -33,21 +33,21 @@ public class PlaceResult extends HandleResult
         this.rotate = false;
     }
 
-    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource source, ItemSource target,boolean rotate)
+    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, SlotSource source, SlotSource target, boolean rotate)
     {
         super(handleSource,type,target,item);
         this.source = source;
         this.rotate = rotate;
     }
 
-    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, ItemSource target,boolean rotate)
+    public PlaceResult(IHandleSource handleSource, ISlotItem item, Type type, SlotSource target, boolean rotate)
     {
         super(handleSource,type,target,item);
         this.source = null;
         this.rotate = rotate;
     }
 
-    public PlaceResult(ISlotItem item, Type type, ItemSource target,boolean rotate)
+    public PlaceResult(ISlotItem item, Type type, SlotSource target, boolean rotate)
     {
         super(ContainerManager.instance.handleSourceSystem, type,target,item);
         this.source = null;

@@ -6,7 +6,7 @@ public interface IChecker
 {
     public enum Type
     {
-        SUCCESS,TYPE,BLACKLIST_TYPE,BLACKLIST_ID,
+        SUCCESS,TYPE,BLACKLIST_TYPE,BLACKLIST_ID,ITEM_NULL
     }
     Type check(ISlotItem item);
 }

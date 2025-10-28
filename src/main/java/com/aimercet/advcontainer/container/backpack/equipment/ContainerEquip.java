@@ -17,13 +17,13 @@ public class ContainerEquip extends Container
 {
     public static final String CLASS_NAME = "equip";
 
-    public List<EquipType> allowedEquipSlots = new ArrayList<>();
     private final EquipCallbackList callbackEquip = new EquipCallbackList();
     private Backpack backpack;
 
     protected ContainerEquip(String uuid)
     {
         super(uuid);
+        getGUIStyle().setStyle("equip");
         this.handler = ContainerManager.instance.handlerEquipment;
         this.defaultHandler = handler.getHandlerID();
     }
@@ -32,6 +32,30 @@ public class ContainerEquip extends Container
     public void initContainer()
     {
         super.initContainer();
+    }
+
+    public ContainerEquip setEquipSizeSingal(int size,List<EquipType> types)
+    {
+        for (int i = 0; i < size; i++) {
+            StockEquip stock = createStock();
+            stock.setSize(new SizeInt(1,1));
+            stock.addEquipTypes(i >= (types.size()-1)?null: types.get(i));
+            stock.initStock();
+            getStockList().add(stock);
+        }
+        return this;
+    }
+
+    public ContainerEquip setEquipSize(int size,List<List<EquipType>> types)
+    {
+        for (int i = 0; i < size; i++) {
+            StockEquip stock = createStock();
+            stock.setSize(new SizeInt(1,1));
+            stock.setEquipTypes(i >= (types.size()-1)?null: types.get(i));
+            stock.initStock();
+            getStockList().add(stock);
+        }
+        return this;
     }
 
     @Override
@@ -46,7 +70,7 @@ public class ContainerEquip extends Container
     }
 
     @Override public StockEquip createStock() {return new StockEquip(this);}
-    @Override public ISlot createSlot(IStock stock, Coord coord) {return super.createSlot(stock, coord);}
+    @Override public ISlot createSlot(IStock stock, Coord coord) {return new SlotEquip(stock, coord);}
 
     public Backpack getBackpack()                           {return backpack;}
     public ContainerEquip setBackpack(Backpack backpack)    {this.backpack = backpack;return this;}

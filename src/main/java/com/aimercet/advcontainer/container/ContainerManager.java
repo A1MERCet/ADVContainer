@@ -175,6 +175,7 @@ public class ContainerManager
         IContainer container = ContainerFactory.Create(cfgClz, uuid);
         container.initContainer();
         container.load(section);
+        ContainerManager.instance.register(container);
         return container;
     }
 

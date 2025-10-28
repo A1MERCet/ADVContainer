@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.item.item;
 
+import com.aimercet.advcontainer.container.backpack.equipment.EquipType;
 import com.aimercet.advcontainer.item.ItemType;
 import com.aimercet.advcontainer.item.Quality;
 import com.aimercet.advcontainer.loot.item.LootItem;
@@ -20,6 +21,7 @@ public class TypeItem
 
     public ItemType type;
     public Quality quality;
+    public EquipType equipType;
 
     public int maxAmount;
     public long systemPrice;
@@ -30,6 +32,7 @@ public class TypeItem
     public SizeInt defaultSize = new SizeInt(1, 1);
 
     public LootItem loot;
+
 
     public TypeItem(String id)
     {
@@ -56,6 +59,7 @@ public class TypeItem
     {
         type            = ItemType.valueOf(section.getString("type"));
         quality         = Quality.fromLevel(section.getInt("quality",0));
+        equipType       = EquipType.valueOf(section.getString("equipType"));
 
         maxAmount       = section.getInt("maxAmount",1);
         systemPrice     = section.getLong("systemPrice",-1L);
@@ -70,15 +74,16 @@ public class TypeItem
         loot.maxAmount  = section.getInt("loot.maxAmount",1);
     }
 
-    public String getID()               {return id;}
-    public ItemType getType()           {return type;}
-    public Quality getQuality()         {return quality;}
-    public int getMaxAmount()           {return maxAmount;}
-    public long getSystemPrice()        {return systemPrice;}
-    public float getMaxDuration()       {return maxDuration;}
-    public boolean isDurationBreak()    {return durationBreak;}
-    public SizeInt getDefaultSize()     {return defaultSize;}
-    public LootItem getDefaultLoot()    {return loot.clone();}
+    public String getID()                   {return id;}
+    public ItemType getType()               {return type;}
+    public Quality getQuality()             {return quality;}
+    public int getMaxAmount()               {return maxAmount;}
+    public long getSystemPrice()            {return systemPrice;}
+    public float getMaxDuration()           {return maxDuration;}
+    public boolean isDurationBreak()        {return durationBreak;}
+    public SizeInt getDefaultSize()         {return defaultSize;}
+    public LootItem getDefaultLoot()        {return loot.clone();}
+    public EquipType getEquipType()         {return equipType;}
 
     @Override public String toString() {return getClass().getSimpleName()+"[ID="+getID()+", Type:"+type+", "+getDefaultSize()+"]";}
 }

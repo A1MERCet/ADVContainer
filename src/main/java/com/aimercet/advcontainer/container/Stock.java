@@ -7,10 +7,10 @@ import com.aimercet.advcontainer.item.ItemType;
 
 public class Stock implements IStock
 {
-    private GPartStyle guiStyle;
     private final IContainer container;
     private ISlot[][] slotsAry;
     private IChecker checker;
+    private GPartStyle guiStyle = new GPartStyle();
 
     public Stock(IContainer container)
     {

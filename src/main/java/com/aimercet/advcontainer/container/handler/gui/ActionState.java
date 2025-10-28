@@ -1,6 +1,6 @@
 package com.aimercet.advcontainer.container.handler.gui;
 
-import com.aimercet.advcontainer.container.handler.ItemSource;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 import com.sun.istack.internal.Nullable;
 
 /**
@@ -30,16 +30,16 @@ public class ActionState
     }
 
     public final Type type;
-    @Nullable public final ItemSource source;
+    @Nullable public final SlotSource source;
     public boolean rotate;
 
-    public ActionState(Type type, ItemSource source,boolean rotate)
+    public ActionState(Type type, SlotSource source, boolean rotate)
     {
         this(type,source);
         this.rotate = rotate;
     }
 
-    public ActionState(Type type, ItemSource source)
+    public ActionState(Type type, SlotSource source)
     {
         this.type = type;
         this.source = source;

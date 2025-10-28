@@ -28,7 +28,7 @@ public interface IContainerHandler
     /**
      * 返回source的物品如果转移到target其自身以及占用的格子是否在自身范围内
      */
-    default boolean isTransferOwnSpace(ItemSource source ,ItemSource target)
+    default boolean isTransferOwnSpace(SlotSource source , SlotSource target)
     {
         if(source==null || target==null)return false;
         ISlot slot = source.get();
@@ -77,7 +77,7 @@ public interface IContainerHandler
         List<RemoveResult> results = new ArrayList<RemoveResult>();
         for (int y = 0; y < stock.getSizeY(); y++)
             for (int x = 0; x < stock.getSizeX(); x++)
-                results.add(remove(handleSource,new ItemSource(stock,new Coord(x,y))));
+                results.add(remove(handleSource,new SlotSource(stock,new Coord(x,y))));
         return results;
     }
 
@@ -90,7 +90,7 @@ public interface IContainerHandler
                 {
                     ISlot slot = stock.get(x, y);
                     if(slot!=null && slot.hasItem())
-                        results.add(remove(handleSource,new ItemSource(stock,new Coord(x,y))));
+                        results.add(remove(handleSource,new SlotSource(stock,new Coord(x,y))));
                 }
         return results;
     }
@@ -122,11 +122,11 @@ public interface IContainerHandler
         for (int y = 0; y < stock.getSizeY(); y++)
             for (int x = 0; x < stock.getSizeX(); x++)
             {
-                result = place(handleSource, item, new ItemSource(stock, new Coord(x, y)),false,false);
+                result = place(handleSource, item, new SlotSource(stock, new Coord(x, y)),false,false);
                 if(result.type==PlaceResult.Type.SUCCESS) return result;
                 if(size.height!=size.width)
                 {
-                    result = place(handleSource, item, new ItemSource(stock, new Coord(x, y)),true,false);
+                    result = place(handleSource, item, new SlotSource(stock, new Coord(x, y)),true,false);
                     if(result.type==PlaceResult.Type.SUCCESS) return result;
                 }
             }
@@ -137,20 +137,20 @@ public interface IContainerHandler
     /**
      * 前置条件检查
      */
-    default PlaceResult.Type preCheck(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate)
+    default PlaceResult.Type preCheck(IHandleSource handleSource, ISlotItem item, SlotSource coord, boolean rotate)
     {
         if(Util.checkNull(coord))                                   return PlaceResult.Type.COORD_NULL;
-        if(!checkHandler(handleSource,coord.stock.getContainer()))  return PlaceResult.Type.REFUSE;
+        if(!checkHandler(handleSource,coord.getContainer()))  return PlaceResult.Type.REFUSE;
 
 
         if(coord.get().isOccupied())                                return PlaceResult.Type.NO_SPACE;
 
         if(item.getTypeItem()==null)                                return PlaceResult.Type.ITEM_NULL;
-        if(coord.stock.getChecker()!=null) {
-            Enum<?> check = coord.stock.getChecker().check(item);
+        if(coord.getStock().getChecker()!=null) {
+            Enum<?> check = coord.getStock().getChecker().check(item);
             if(check != IChecker.Type.SUCCESS)                      return PlaceResult.Type.CHECK_FAIL;
         }else{
-            Logger.warn("Stock["+coord.stock.getContainer().getUUID()+" - "+coord.stock.getContainer().getStockList().indexOf(coord.stock)+"]'s checker is null");
+            Logger.warn("Stock["+coord.getContainer().getUUID()+" - "+coord.stock+"]'s checker is null");
         }
         return PlaceResult.Type.SUCCESS;
     }
@@ -158,21 +158,21 @@ public interface IContainerHandler
     /**
      * 空间检查
      */
-    default PlaceResult.Type spaceCheck(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate , ItemSource exclude)
+    default PlaceResult.Type spaceCheck(IHandleSource handleSource, ISlotItem item, SlotSource coord, boolean rotate , SlotSource exclude)
     {
-        if(!checkHandler(handleSource,coord.stock.getContainer()))  return PlaceResult.Type.REFUSE;
+        if(!checkHandler(handleSource,coord.getContainer()))  return PlaceResult.Type.REFUSE;
 
         SizeInt size = getItemSize(item,rotate);
         if(size==null || size.size()<=0)                            return PlaceResult.Type.SIZE_ERROR;
-        if(size.size() > coord.stock.getEmpty())                    return PlaceResult.Type.FULL;
+        if(size.size() > coord.getStock().getEmpty())                    return PlaceResult.Type.FULL;
 
-        SizeInt stockSize = coord.stock.getSize();
+        SizeInt stockSize = coord.getStock().getSize();
         if(stockSize==null || stockSize.size()<=0)                  return PlaceResult.Type.STOCK_SIZE;
 
         int endX = coord.coord.x + size.width,endY = coord.coord.y + size.height;
         if(endX>stockSize.width || endY> stockSize.height)          return PlaceResult.Type.BOUND;
 
-        if(Util.isOccupied(coord.stock, coord.coord,size,exclude))  return PlaceResult.Type.NO_SPACE;
+        if(Util.isOccupied(coord.getStock(), coord.coord,size,exclude))  return PlaceResult.Type.NO_SPACE;
 
         return PlaceResult.Type.SUCCESS;
     }
@@ -180,9 +180,9 @@ public interface IContainerHandler
     /**
      * 综合检查
      */
-    default PlaceResult.Type checkPlace(IHandleSource handleSource, ISlotItem item, ItemSource coord , boolean rotate , ItemSource exclude)
+    default PlaceResult.Type checkPlace(IHandleSource handleSource, ISlotItem item, SlotSource coord , boolean rotate , SlotSource exclude)
     {
-        if(!checkHandler(handleSource,coord.stock.getContainer()))return PlaceResult.Type.REFUSE;
+        if(!checkHandler(handleSource,coord.getStock().getContainer()))return PlaceResult.Type.REFUSE;
 
         PlaceResult.Type preCheck = preCheck(handleSource,item, coord,rotate);
         if(preCheck!= PlaceResult.Type.SUCCESS)                 return preCheck;
@@ -203,9 +203,9 @@ public interface IContainerHandler
         return size;
     }
 
-    default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate){return place(handleSource, item, coord, rotate,false,null);}
-    default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate,boolean bypass){return place(handleSource, item, coord, rotate,bypass,null);}
-    default PlaceResult place(IHandleSource handleSource, ISlotItem item, ItemSource coord,boolean rotate , boolean bypass,ItemSource exclude)
+    default PlaceResult place(IHandleSource handleSource, ISlotItem item, SlotSource coord, boolean rotate){return place(handleSource, item, coord, rotate,false,null);}
+    default PlaceResult place(IHandleSource handleSource, ISlotItem item, SlotSource coord, boolean rotate, boolean bypass){return place(handleSource, item, coord, rotate,bypass,null);}
+    default PlaceResult place(IHandleSource handleSource, ISlotItem item, SlotSource coord, boolean rotate , boolean bypass, SlotSource exclude)
     {
         if(!bypass){
             PlaceResult.Type check = checkPlace(handleSource, item, coord, rotate , exclude);
@@ -218,9 +218,9 @@ public interface IContainerHandler
 
         SizeInt size =  getItemSize(item,rotate);
 
-        Util.fillSource(coord.stock,coord.coord,size);
-        coord.stock.getSlots()[coord.coord.x][coord.coord.y].setItem(item);
-        coord.stock.getSlots()[coord.coord.x][coord.coord.y].setRotate(rotate);
+        Util.fillSource(coord.getStock(),coord.coord,size);
+        coord.getStock().getSlots()[coord.coord.x][coord.coord.y].setItem(item);
+        coord.getStock().getSlots()[coord.coord.x][coord.coord.y].setRotate(rotate);
 
         PlaceResult result = new PlaceResult(handleSource, item, PlaceResult.Type.SUCCESS, coord,rotate);
         onPlace(result);
@@ -231,14 +231,14 @@ public interface IContainerHandler
         return result;
     }
 
-    default RemoveResult remove(IHandleSource handleSource, ItemSource coord)
+    default RemoveResult remove(IHandleSource handleSource, SlotSource coord)
     {
         ISlotItem item = coord.getItem();;
         if(item==null)                                              return new RemoveResult(handleSource,item, RemoveResult.Type.NO_ITEM,coord);
         if(Util.checkNull(coord))                                   return new RemoveResult(handleSource,item, RemoveResult.Type.COORD_NULL,coord);
-        if(!checkHandler(handleSource,coord.stock.getContainer()))  return new RemoveResult(handleSource,item, RemoveResult.Type.REFUSE,coord);
+        if(!checkHandler(handleSource,coord.getStock().getContainer()))  return new RemoveResult(handleSource,item, RemoveResult.Type.REFUSE,coord);
 
-        SizeInt stockSize = coord.stock.getSize();
+        SizeInt stockSize = coord.getStock().getSize();
         if(stockSize==null || stockSize.size()<=0)                  return new RemoveResult(handleSource,item, RemoveResult.Type.STOCK_SIZE,coord);
 
         SizeInt size = getItemSize(item,coord.get().isRotate());
@@ -248,8 +248,8 @@ public interface IContainerHandler
         Bukkit.getPluginManager().callEvent(preEvent);
         if(preEvent.isCancelled()) return new RemoveResult(handleSource,item, RemoveResult.Type.REFUSE,coord);
 
-        Util.clearSource(coord.stock,coord.coord,size);
-        coord.stock.getSlots()[coord.coord.x][coord.coord.y].setItem(null);
+        Util.clearSource(coord.getStock(),coord.coord,size);
+        coord.getStock().getSlots()[coord.coord.x][coord.coord.y].setItem(null);
 
         RemoveResult result = new RemoveResult(handleSource, item, RemoveResult.Type.SUCCESS, coord);
         onRemove(result);
@@ -263,14 +263,14 @@ public interface IContainerHandler
     default void onPlace(PlaceResult result)
     {
         result.handleSource.addHistory(result);
-        result.coord.stock.getContainer().addHistory(result);
-        result.coord.stock.getContainer().onPlace(result);
+        result.coord.getStock().getContainer().addHistory(result);
+        result.coord.getStock().getContainer().onPlace(result);
     }
     default void onRemove(RemoveResult result)
     {
         result.handleSource.addHistory(result);
-        result.coord.stock.getContainer().addHistory(result);
-        result.coord.stock.getContainer().onRemove(result);
+        result.coord.getStock().getContainer().addHistory(result);
+        result.coord.getStock().getContainer().onRemove(result);
     }
 
 }

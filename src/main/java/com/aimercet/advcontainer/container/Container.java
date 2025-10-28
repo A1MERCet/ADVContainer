@@ -29,7 +29,6 @@ public class Container implements IContainer
     protected Container(String uuid)
     {
         this.uuid = uuid;
-        ContainerManager.instance.register(this);
     }
 
     @Override public IContainerHandler getDefaultHandler()                  {return ContainerManager.getHandler(defaultHandler);}
@@ -50,13 +49,10 @@ public class Container implements IContainer
     @Override
     public void initContainer()
     {
-
     }
 
     @Override
     public String toString() {
-        StringBuilder b = new StringBuilder();
-        stockList.forEach(s -> b.append(s.toString()).append(" "));
-        return getClass().getSimpleName()+"[UUID="+uuid+", "+source+", Stock[Count="+stockList.size()+"]="+b.toString()+"]";
+        return getClass().getSimpleName()+"[UUID="+uuid+", source="+source+", stock[count="+stockList.size()+"]";
     }
 }

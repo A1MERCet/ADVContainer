@@ -2,7 +2,7 @@ package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.handler.IChecker;
-import com.aimercet.advcontainer.container.handler.ItemSource;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
@@ -47,7 +47,7 @@ public interface IStock
                     boolean rotate = section.getBoolean(x+"-"+y+".rotate");
 
                     if(slotItem!=null){
-                        PlaceResult result = getContainer().getHandler().place(ContainerManager.instance.handleSourceConfig, slotItem, new ItemSource(this, new Coord(x, y)), rotate);
+                        PlaceResult result = getContainer().getHandler().place(ContainerManager.instance.handleSourceConfig, slotItem, new SlotSource(getContainer(),getIndex(), new Coord(x, y)), rotate);
                         if(result.type!=PlaceResult.Type.SUCCESS) Logger.warn("load item fail["+getContainer().getUUID()+" - "+getContainer().getStockList().indexOf(this)+"] in coord["+x+", "+y+"]");
                     }
                 }
@@ -96,15 +96,15 @@ public interface IStock
         return true;
     }
 
-    default List<ItemSource> getItems()
+    default List<SlotSource> getItems()
     {
-        List<ItemSource> list = new ArrayList<ItemSource>();
+        List<SlotSource> list = new ArrayList<SlotSource>();
 
         for (int x = 0; x < getSlots().length; x++)
             for (int y = 0; y < getSlots()[x].length; y++)
             {
                 ISlot slot = get(x, y); if(slot==null || !slot.hasItem())continue;
-                list.add(new ItemSource(this,new Coord(x,y)));
+                list.add(new SlotSource(slot));
             }
 
         return list;
@@ -112,10 +112,15 @@ public interface IStock
 
     default SizeInt getSize() {return new SizeInt(getSizeX(), getSizeY());}
     default int getSizeX(){
-        if(getSlots().length==0 || getSlots()[0].length==0)return 0;
+        if(getSlots()==null || getSlots().length==0 || getSlots()[0].length==0)return 0;
         return getSlots().length;
     }
     default int getSizeY(){
         if(getSlots().length==0)return 0;else return getSlots()[0].length;
+    }
+    default int getIndex()
+    {
+        if(getContainer()==null)return -1;
+        return getContainer().getStockList().indexOf(this);
     }
 }

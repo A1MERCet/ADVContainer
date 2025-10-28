@@ -59,6 +59,8 @@ public class DataItem
     public HashMap<String, String> getCustomData() {return customData;}
     public DataItem setCustomData(HashMap<String, String> customData) {this.customData = customData;return this;}
     public DataItem addCustomData(String k,String v){customData.put(k,v);return this;}
+
+
     public HashMap<String,String> toMap()
     {
         HashMap<String,String> map = new HashMap<>();

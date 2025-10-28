@@ -5,8 +5,7 @@ import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.handler.GetResult;
 import com.aimercet.advcontainer.container.handler.ItemDetailed;
-import com.aimercet.advcontainer.container.handler.ItemSource;
-import com.aimercet.advcontainer.container.slotitem.ISlotItem;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 import com.aimercet.brlib.log.Logger;
 
 import java.util.List;
@@ -23,8 +22,8 @@ public class Util
             long left = entry.required;
             for (IStock stock : container.getStockList())
             {
-                List<ItemSource> stockItems = stock.getItems();
-                for (ItemSource item : stockItems) {
+                List<SlotSource> stockItems = stock.getItems();
+                for (SlotSource item : stockItems) {
                     if(item.getItem()==null)continue;
                     if(!item.getItem().getSlotItemID().equals(entry.item.getID()))continue;
 
@@ -43,9 +42,9 @@ public class Util
 
         return result;
     }
-    public static boolean checkNull(ItemSource source)
+    public static boolean checkNull(SlotSource source)
     {
-        if(source.stock == null || source.coord==null || source.stock.getContainer() ==null)return true;
+        if(source.getStock() == null || source.coord==null)return true;
         return false;
     }
 
@@ -63,7 +62,7 @@ public class Util
     }
 
     public static boolean isOccupied(IStock stock , Coord coord , SizeInt size ){return isOccupied(stock,coord,size,null);}
-    public static boolean isOccupied(IStock stock , Coord coord , SizeInt size , ItemSource exclude)
+    public static boolean isOccupied(IStock stock , Coord coord , SizeInt size , SlotSource exclude)
     {
         if(stock==null)return false;
 

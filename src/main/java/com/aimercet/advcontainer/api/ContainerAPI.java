@@ -8,7 +8,7 @@ import com.aimercet.advcontainer.api.gui.data.DataStock;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.IStock;
-import com.aimercet.advcontainer.container.handler.ItemSource;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
 import com.aimercet.advcontainer.container.handler.TransferResult;
@@ -56,7 +56,7 @@ public class ContainerAPI
      * 从指针槽位的物品转移到目标槽位
      * @param clearCursor 转移成功后重置指针状态
      */
-    public TransferResult doPlayerTransfer(Player player , ItemSource source , ItemSource target , boolean rotate , boolean clearCursor)
+    public TransferResult doPlayerTransfer(Player player , SlotSource source , SlotSource target , boolean rotate , boolean clearCursor)
     {
         if(source==null || target==null) return new TransferResult(null,null);
 
@@ -106,7 +106,7 @@ public class ContainerAPI
         GUIActionState.Cursor cursor = getCursor(player);
         if(cursor==null)return false;
 
-        cursor.set(new ItemSource(slot.getStock(), slot.getCoord()),rotate);
+        cursor.set(new SlotSource(slot.getStock(), slot.getCoord()),rotate);
 
         return true;
     }
@@ -127,7 +127,7 @@ public class ContainerAPI
                     .setStyle(stock.getGUIStyle())
                     ;
 
-            for (ItemSource item : stock.getItems())
+            for (SlotSource item : stock.getItems())
             {
                 if(item==null||item.getItem()==null||item.coord==null)continue;
                 DataItem dataItem = parseItem(item);
@@ -141,7 +141,7 @@ public class ContainerAPI
         return dataContainer;
     }
 
-    public DataSlot parseSlot(ItemSource source)
+    public DataSlot parseSlot(SlotSource source)
     {
         if(source==null)return null;
 
@@ -155,7 +155,7 @@ public class ContainerAPI
         return dataSlot;
     }
 
-    public DataItem parseItem(ItemSource source)
+    public DataItem parseItem(SlotSource source)
     {
         if(source==null || source.getItem()==null)return null;
 

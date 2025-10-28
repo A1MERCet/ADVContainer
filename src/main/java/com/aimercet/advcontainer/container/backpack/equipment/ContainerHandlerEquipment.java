@@ -5,7 +5,6 @@ import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.handler.IContainerHandler;
-import com.aimercet.advcontainer.container.handler.ItemSource;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;

@@ -2,6 +2,7 @@ package com.aimercet.advcontainer.container.handler;
 
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemType;
+import com.aimercet.advcontainer.item.item.TypeItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class Checker implements IChecker , Cloneable
     public Checker clear()                      {allowTypes.clear();blacklistTypes.clear();allowID.clear();blacklistID.clear();return this;}
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
+    protected Checker clone() throws CloneNotSupportedException {
         try {
             Checker clone = (Checker) super.clone();
             clone.allowTypes.addAll(allowTypes);
@@ -44,8 +45,12 @@ public class Checker implements IChecker , Cloneable
     @Override
     public IChecker.Type check(ISlotItem item)
     {
-        String id = item.getSlotItemID();
-        ItemType type = item.getTypeItem().type;
+        if(item==null) return IChecker.Type.ITEM_NULL;
+        TypeItem typeItem = item.getTypeItem();
+        if(typeItem==null) return IChecker.Type.ITEM_NULL;
+
+        String id = typeItem.getID();
+        ItemType type = typeItem.type;
 
         if(allowID.contains(id))            return IChecker.Type.SUCCESS;
 

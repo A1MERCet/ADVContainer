@@ -11,11 +11,11 @@ public class GetResult
 {
     public static class Entry
     {
-        public final ItemSource source;
+        public final SlotSource source;
         public final long required;
         public final long amount;
 
-        public Entry(ItemSource source, long required, long amount)
+        public Entry(SlotSource source, long required, long amount)
         {
             this.source = source;
             this.required = required;
@@ -53,8 +53,8 @@ public class GetResult
     {
         if(entries.isEmpty())return null;
         Entry head = entries.get(0);
-        if(head == null || head.source==null || head.source.stock==null)return null;
-        return head.source.stock.getContainer();
+        if(head == null || head.source==null)return null;
+        return head.source.getContainer();
     }
 
     public boolean isMissing(){return !missing.isEmpty();}

@@ -41,7 +41,7 @@ public class CMDContainerPlayer extends CMDBasic
 
         ISlot slot = stock.get(x, y);
         if(slot == null) return;
-        ItemSource target = slot.toSource();
+        SlotSource target = slot.toSource();
 
         GUIActionState.Cursor cursor = ContainerAPI.instance.getCursor((Player)sender);
 
@@ -126,7 +126,7 @@ public class CMDContainerPlayer extends CMDBasic
         ISlot slot = stock.get(x, y);
         if(slot == null) return;
 
-        cursor.setSource(new ItemSource(stock,slot.getCoord()));
+        cursor.setSource(new SlotSource(stock,slot.getCoord()));
 
     }
 

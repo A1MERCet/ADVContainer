@@ -20,6 +20,6 @@ public class ModuleContainerState extends PlayerModule
     protected ModuleContainerState(PlayerState playerState)
     {
         super(MODULE_NAME, playerState, false);
-        handleSource = new HandleSourcePlayer(playerState);
+        handleSource = HandleSourcePlayer.fromPlayer(playerState);
     }
 }

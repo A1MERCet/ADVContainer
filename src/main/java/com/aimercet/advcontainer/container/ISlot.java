@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.container;
 
 import com.aimercet.advcontainer.api.gui.GPartStyle;
-import com.aimercet.advcontainer.container.handler.ItemSource;
+import com.aimercet.advcontainer.container.handler.SlotSource;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.util.Coord;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,7 +34,7 @@ public interface ISlot
      */
     default boolean isOccupied()            {return hasItem() || isPlaceholder();}
 
-    default ItemSource toSource()           {return new ItemSource(getStock(),getCoord());}
+    default SlotSource toSource()           {return new SlotSource(this);}
 
     boolean isRotate();
     void setRotate(boolean rotate);

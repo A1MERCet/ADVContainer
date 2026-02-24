@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.version;
 
-import com.aimercet.advcontainer.version.versions.v1_12.AdapterV1_12;
-import com.aimercet.advcontainer.version.versions.v1_20.AdapterV1_20;
+import com.aimercet.advcontainer.version.v1_12.AdapterV1_12;
+import com.aimercet.advcontainer.version.v1_20.AdapterV1_20;
 
 public class AdapterFactory
 {

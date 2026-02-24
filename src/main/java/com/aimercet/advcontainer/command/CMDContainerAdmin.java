@@ -176,7 +176,7 @@ public class CMDContainerAdmin extends CMDBasic
         if(container == null) {sender.sendMessage("容器["+uuid+"]不存在");return;}
 
         if(stock>=container.getStockList().size()) {sender.sendMessage("库存下标["+stock+"]超出索引范围");return;}
-        SlotItemStack slotItemStack = new SlotItemStack(ItemManager.setAmount(item.createItem(),amount));
+        SlotItemStack slotItemStack = new SlotItemStack(ItemManager.setAmount(item.createItemStack(),amount));
 
         PlaceResult place;
         if(stock<0) {

@@ -1,5 +1,7 @@
 package com.aimercet.advcontainer.loot.item;
 
+import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
+import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.Quality;
 import com.aimercet.advcontainer.item.item.TypeItem;
@@ -8,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 
-public class LootItem implements ILootItem , Cloneable
+public class LootItemStack implements ILootItem , Cloneable
 {
     public static final Random random = new Random();
     private TypeItem item;
@@ -20,7 +22,7 @@ public class LootItem implements ILootItem , Cloneable
     public long minAmount = 1L;
     public long maxAmount = 1L;
 
-    public LootItem(TypeItem item)
+    public LootItemStack(TypeItem item)
     {
         this.item = item;
         this.qualityOverlap = item.getQuality();
@@ -28,7 +30,7 @@ public class LootItem implements ILootItem , Cloneable
 
 
     @Override
-    public ItemStack random(ILootTrigger trigger)
+    public ISlotItem random(ILootTrigger trigger)
     {
         float rnd = random.nextFloat();
         long amount = (long)Math.min(1L,(maxAmount-minAmount+1L)*rnd)+minAmount-1L;
@@ -36,17 +38,17 @@ public class LootItem implements ILootItem , Cloneable
         amount = Math.min(amount, maxAmount);
         amount = Math.max(amount, minAmount);
 
-        ItemStack isk = item.createItem();
+        ItemStack isk = item.createItemStack();
         ItemManager.setAmount(isk, amount);
 
-        return isk;
+        return new SlotItemStack(isk);
     }
 
     @Override
-    public LootItem clone()
+    public LootItemStack clone()
     {
         try {
-            LootItem i = (LootItem) super.clone();
+            LootItemStack i = (LootItemStack) super.clone();
 
             i.item = item;
             i.minAmount = minAmount;
@@ -56,10 +58,10 @@ public class LootItem implements ILootItem , Cloneable
         }catch (CloneNotSupportedException e) {throw new AssertionError();}
     }
 
-    public LootItem setRate(float rate) {this.rate = rate;return this;}
-    public LootItem setAmount(long min , long max){setMinAmount(min);setMaxAmount(max);return this;}
-    public LootItem setMinAmount(long minAmount) {this.minAmount = minAmount;return this;}
-    public LootItem setMaxAmount(long maxAmount) {this.maxAmount = maxAmount;return this;}
+    public LootItemStack setRate(float rate) {this.rate = rate;return this;}
+    public LootItemStack setAmount(long min , long max){setMinAmount(min);setMaxAmount(max);return this;}
+    public LootItemStack setMinAmount(long minAmount) {this.minAmount = minAmount;return this;}
+    public LootItemStack setMaxAmount(long maxAmount) {this.maxAmount = maxAmount;return this;}
 
     @Override public TypeItem getItem() {return null;}
     @Override public float getRate() {return rate;}

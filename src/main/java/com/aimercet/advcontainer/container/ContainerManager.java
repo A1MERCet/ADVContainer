@@ -14,7 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -125,18 +124,10 @@ public class ContainerManager
         return container!=null;
     }
 
-    public ItemStack bindToItem(ItemStack isk,IContainer container)
-    {
-        if(isk==null || container==null)return null;
-        ItemManager.setContainer(isk,container);
-        container.setInventorySource(new SourceItemStack(isk));
-        return isk;
-    }
-
     public IContainer loadContainer(ISlotItem item)
     {
         if(item==null)return null;
-        String uuid = item.getContainer();
+        String uuid = item.getContainerUUID();
         IContainer container = loadContainer(uuid);
         if(container!=null) container.setInventorySource(new SourceSlotItem(item));
         return container;

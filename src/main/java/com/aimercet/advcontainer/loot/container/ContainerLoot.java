@@ -1,18 +1,18 @@
 package com.aimercet.advcontainer.loot.container;
 
+import com.aimercet.advcontainer.bridge.minecraft.vanilla.UtilVanillaInventory;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.ContainerTemplate;
 import com.aimercet.advcontainer.container.IContainer;
+import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.loot.condition.ISpawnCondition;
 import com.aimercet.advcontainer.loot.ILootState;
 import com.aimercet.advcontainer.loot.item.ILootTable;
 import com.aimercet.advcontainer.loot.trigger.ILootTrigger;
-import com.aimercet.advcontainer.util.UtilItem;
 import com.aimercet.brlib.localization.Localization;
 import com.aimercet.brlib.log.Logger;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -44,14 +44,13 @@ public class ContainerLoot implements IContainerLoot
         {
             container.getHandler().clear(ContainerManager.instance.handleSourceSystem, container);
 
-            List<ItemStack> list = getLootTable().random(trigger);
+            List<ISlotItem> list = getLootTable().random(trigger);
 
             StringBuilder b =  new StringBuilder().append("\n容器物资["+lootID+"]生成物品["+list.size()+"]\n");
             list.forEach(i->{
-                ls.getContainer().getHandler().place(ContainerManager.instance.handleSourceSystem, UtilItem.toSlotItem(i),ls.getContainer());
-
-                TypeItem t = ItemManager.Get(i);
-                b.append("  "+(t==null?i.getType().name():Localization.get(t.fullLang))+"\n");
+                TypeItem t = i.getTypeItem();
+                ls.getContainer().getHandler().place(ContainerManager.instance.handleSourceSystem, i,ls.getContainer());
+                b.append("  "+Localization.get(t.fullLang)+"\n");
             });
             Logger.info(b.toString());
         }

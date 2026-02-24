@@ -10,7 +10,7 @@ import com.aimercet.advcontainer.item.ItemType;
 import com.aimercet.advcontainer.item.Quality;
 import com.aimercet.advcontainer.item.item.property.Property;
 import com.aimercet.advcontainer.item.item.property.PropertyFactory;
-import com.aimercet.advcontainer.loot.item.LootItem;
+import com.aimercet.advcontainer.loot.item.LootItemStack;
 import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.brlib.localization.Localization;
 import org.bukkit.Bukkit;
@@ -41,7 +41,7 @@ public class TypeItem
 
     public SizeInt defaultSize = new SizeInt(1, 1);
 
-    public LootItem loot;
+    public LootItemStack loot;
 
     private HashMap<String, Property<?>> property = new HashMap();
 
@@ -52,7 +52,7 @@ public class TypeItem
     public TypeItem(String id)
     {
         this.id = id;
-        this.loot = new LootItem(this);
+        this.loot = new LootItemStack(this);
         this.fullLang = Localization.register("item_full_"+id,id);
         this.shortLang = Localization.register("item_short_"+id,id);
         this.descriptionLang = Localization.register("item_descr_"+id,id);
@@ -75,7 +75,7 @@ public class TypeItem
 
     }
 
-    public ItemStack createItem()
+    public ItemStack createItemStack()
     {
         return new ItemStack(Material.valueOf(id));
     }
@@ -129,7 +129,7 @@ public class TypeItem
     public float getMaxDuration()           {return maxDuration;}
     public boolean isDurationBreak()        {return durationBreak;}
     public SizeInt getDefaultSize()         {return defaultSize;}
-    public LootItem getDefaultLoot()        {return loot.clone();}
+    public LootItemStack getDefaultLoot()        {return loot.clone();}
     public EquipType getEquipType()         {return equipType;}
     public HashMap<String, Property<?>> getProperty() {return property;}
 

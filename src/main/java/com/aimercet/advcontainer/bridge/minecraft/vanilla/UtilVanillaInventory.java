@@ -1,5 +1,8 @@
 package com.aimercet.advcontainer.bridge.minecraft.vanilla;
 
+import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
+import com.aimercet.advcontainer.container.slotitem.ISlotItem;
+import com.aimercet.advcontainer.item.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -12,6 +15,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class UtilVanillaInventory
 {
+    public static ISlotItem toSlotItem(ItemStack itemStack)
+    {
+        if(ItemManager.Get(itemStack)==null)return null;
+        return new SlotItemStack(itemStack);
+    }
+
     public static boolean tryPlaceItem(Player player,Inventory inventory, ItemStack isk, int index)
     {
         if(isk==null) return false;

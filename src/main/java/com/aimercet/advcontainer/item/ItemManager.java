@@ -82,7 +82,7 @@ public class ItemManager
     public ItemStack create(String id)
     {
         TypeItem i = get(id);
-        return i.createItem();
+        return i.createItemStack();
     }
 
     public void load()

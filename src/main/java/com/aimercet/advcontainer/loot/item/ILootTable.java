@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.loot.item;
 
+import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.ItemType;
 import com.aimercet.advcontainer.item.Quality;
@@ -7,7 +8,6 @@ import com.aimercet.advcontainer.item.item.TypeItem;
 import com.aimercet.advcontainer.loot.LootManager;
 import com.aimercet.advcontainer.loot.trigger.ILootTrigger;
 import com.aimercet.brlib.log.Logger;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,27 +16,27 @@ import java.util.Random;
 
 public interface ILootTable
 {
-    public static Random  random = new Random();
+    public static Random random = new Random();
     List<ILootItem> getLoots();
     HashMap<Quality,List<ILootItem>> getLootMap();
 
     int getMinCount();
     int getMaxCount();
 
-    default List<ItemStack> random(){return random(LootManager.instance.triggerSystem);}
-    default List<ItemStack> random(ILootTrigger trigger)
+    default List<ISlotItem> random(){return random(LootManager.instance.triggerSystem);}
+    default List<ISlotItem> random(ILootTrigger trigger)
     {
-        List<ItemStack> list = new ArrayList<>();
+        List<ISlotItem> list = new ArrayList<>();
         int count = random.nextInt(getMinCount()) + getMaxCount();
         for (int i = 0; i < count; i++) {
-            ItemStack rnd = randomItem(trigger);
+            ISlotItem rnd = randomItem(trigger);
             if(rnd!=null) list.add(rnd);
         }
         return list;
     }
 
-    default ItemStack randomItem(){return randomItem(LootManager.instance.triggerSystem);}
-    default ItemStack randomItem(ILootTrigger trigger)
+    default ISlotItem randomItem(){return randomItem(LootManager.instance.triggerSystem);}
+    default ISlotItem randomItem(ILootTrigger trigger)
     {
         Quality quality = randomQuality();
         List<ILootItem> list = getLootMap().get(quality);
@@ -73,7 +73,7 @@ public interface ILootTable
             Logger.warn("Type["+type.id+"] not item registered");
         }else{
             for (TypeItem typeItem : list) {
-                LootItem l = new LootItem(typeItem);
+                LootItemStack l = new LootItemStack(typeItem);
                 add(l);
             }
         }

@@ -1,5 +1,6 @@
 package com.aimercet.advcontainer.bridge.minecraft.event;
 
+import com.aimercet.advcontainer.bridge.minecraft.vanilla.UtilVanillaInventory;
 import com.aimercet.advcontainer.container.backpack.Backpack;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
@@ -33,7 +34,7 @@ public class PlayerEventContainer implements Listener
         {
             Player player = (Player)evt.getEntity();
             Backpack backpack = Backpack.get(player);
-            ISlotItem slotItem = UtilItem.toSlotItem(item.getItemStack());
+            ISlotItem slotItem = UtilVanillaInventory.toSlotItem(item.getItemStack());
 
             if(backpack!=null && slotItem!=null)
             {

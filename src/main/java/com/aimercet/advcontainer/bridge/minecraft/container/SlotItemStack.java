@@ -39,7 +39,7 @@ public class SlotItemStack implements ISlotItem
         return typeItem==null?null:typeItem.getSize(item);
     }
 
-    @Override public String getContainer() {return ItemManager.getContainer(item);}
+    @Override public String getContainerUUID() {return ItemManager.getContainer(item);}
 
     @Override
     public void load(ConfigurationSection section)

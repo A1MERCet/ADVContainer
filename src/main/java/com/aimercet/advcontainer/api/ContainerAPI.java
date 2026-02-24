@@ -1,6 +1,7 @@
 package com.aimercet.advcontainer.api;
 
 import com.aimercet.advcontainer.api.gui.GUIActionState;
+import com.aimercet.advcontainer.api.gui.cursor.CursorSourceADVC;
 import com.aimercet.advcontainer.api.gui.data.DataContainer;
 import com.aimercet.advcontainer.api.gui.data.DataItem;
 import com.aimercet.advcontainer.api.gui.data.DataSlot;
@@ -104,7 +105,7 @@ public class ContainerAPI
         GUIActionState.Cursor cursor = getCursor(player);
         if(cursor==null)return false;
 
-        cursor.set(new SlotSource(slot.getStock(), slot.getCoord()),rotate);
+        cursor.set(new CursorSourceADVC(new SlotSource(slot.getStock(), slot.getCoord())),rotate);
 
         return true;
     }

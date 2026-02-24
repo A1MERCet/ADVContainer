@@ -22,8 +22,6 @@ import com.aimercet.advcontainer.version.AdapterFactory;
 import com.aimercet.advcontainer.version.VersionAdapter;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -100,7 +98,7 @@ public final class ADVContainer extends JavaPlugin {
         IContainer c2 = t2.create(ContainerManager.instance.handlerGeneral, UUID.randomUUID().toString()).setInventorySource(ContainerManager.instance.sourceSystem);
         IContainer c3 = t3.create(ContainerManager.instance.handlerGeneral, "test").setInventorySource(ContainerManager.instance.sourceSystem);
 
-        PlaceResult r1 = c3.getHandler().place(ContainerManager.instance.handleSourceSystem, new SlotItemStack(ItemManager.Get("STONE").createItem()),c3);
+        PlaceResult r1 = c3.getHandler().place(ContainerManager.instance.handleSourceSystem, new SlotItemStack(ItemManager.Get("STONE").createItemStack()),c3);
         Logger.info(r1.toString());
     }
 

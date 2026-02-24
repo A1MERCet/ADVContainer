@@ -1,4 +1,4 @@
-package com.aimercet.advcontainer.version.versions.v1_20;
+package com.aimercet.advcontainer.version.v1_20;
 
 import com.aimercet.advcontainer.version.VersionAdapter;
 

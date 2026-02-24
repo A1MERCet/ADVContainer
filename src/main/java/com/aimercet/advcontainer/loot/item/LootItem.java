@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class LootItem implements ILootItem , Cloneable
 {
-    public final Random random;
+    public static final Random random = new Random();
     private TypeItem item;
 
     public Quality qualityOverlap;
@@ -24,7 +24,6 @@ public class LootItem implements ILootItem , Cloneable
     {
         this.item = item;
         this.qualityOverlap = item.getQuality();
-        this.random = new Random();
     }
 
 

@@ -15,9 +15,10 @@ public interface ISlot
     Coord getSourceCoord();
     void setSourceCoord(Coord source);
     ISlotItem getItem();
-    void setItem(ISlotItem item);
+    default void setItem(ISlotItem item){onSetItem(getItem(),item);}
     GPartStyle getGUIStyle();
     void setGUIStyle(GPartStyle guiStyle);
+    default void onSetItem(ISlotItem source, ISlotItem target){};
 
     /**
      * 只返回是否含有物品 不判断作为占位的情况

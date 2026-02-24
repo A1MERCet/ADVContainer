@@ -2,12 +2,13 @@ package com.aimercet.advcontainer.command;
 
 import com.aimercet.advcontainer.api.ContainerAPI;
 import com.aimercet.advcontainer.api.gui.GUIActionState;
+import com.aimercet.advcontainer.api.gui.cursor.CursorSourceADVC;
 import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.ISlot;
 import com.aimercet.advcontainer.container.IStock;
 import com.aimercet.advcontainer.container.handler.*;
-import com.aimercet.advcontainer.player.modules.ModuleContainerState;
+import com.aimercet.advcontainer.modules.ModuleContainerState;
 import com.aimercet.brlib.command.CMDBasic;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.command.CommandSender;
@@ -45,8 +46,9 @@ public class CMDContainerPlayer extends CMDBasic
 
         GUIActionState.Cursor cursor = ContainerAPI.instance.getCursor((Player)sender);
 
+        CursorSourceADVC cursorSource = new CursorSourceADVC(target);
         if(cursor.getSource()==null){
-            cursor.setSource(target);
+            cursor.setSource(cursorSource);
             cursor.setRotate(target.isRotate());
             Logger.debug("Set cursor source");
         }else{

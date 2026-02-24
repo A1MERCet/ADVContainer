@@ -1,13 +1,8 @@
 package com.aimercet.advcontainer.command;
 
-import com.aimercet.advcontainer.container.ContainerManager;
-import com.aimercet.advcontainer.container.ContainerTemplate;
 import com.aimercet.advcontainer.item.ItemManager;
-import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.brlib.command.CMDBasic;
 import org.bukkit.command.CommandSender;
-
-import java.util.UUID;
 
 public class CMDItem extends CMDBasic
 {

@@ -1,7 +1,6 @@
 package com.aimercet.advcontainer.container.source;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 
 public class SourceLocation implements ISource , ISourceLocation
 {

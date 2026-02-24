@@ -2,7 +2,6 @@ package com.aimercet.advcontainer.container.source;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 public class SourceEntity implements ISource , ISourceLocation
 {

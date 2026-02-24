@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.bridge;
 
-import com.aimercet.advcontainer.player.modules.ModuleBackpack;
-import com.aimercet.advcontainer.player.modules.ModuleContainerState;
+import com.aimercet.advcontainer.modules.ModuleBackpack;
+import com.aimercet.advcontainer.modules.ModuleContainerState;
 import com.aimercet.brlib.player.PlayerModuleManager;
 
 public class BRLibBridge

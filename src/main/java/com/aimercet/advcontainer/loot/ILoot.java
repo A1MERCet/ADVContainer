@@ -1,6 +1,6 @@
 package com.aimercet.advcontainer.loot;
 
-import com.aimercet.advcontainer.loot.Condition.ISpawnCondition;
+import com.aimercet.advcontainer.loot.condition.ISpawnCondition;
 import com.aimercet.advcontainer.loot.item.ILootTable;
 import com.aimercet.advcontainer.loot.trigger.ILootTrigger;
 

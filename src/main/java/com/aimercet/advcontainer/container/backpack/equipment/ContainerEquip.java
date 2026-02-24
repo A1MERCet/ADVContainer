@@ -6,11 +6,9 @@ import com.aimercet.advcontainer.container.backpack.equipment.callback.EquipCall
 import com.aimercet.advcontainer.container.backpack.equipment.callback.EquipCallbackList;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
-import com.aimercet.advcontainer.container.source.ISource;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.SizeInt;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerEquip extends Container
@@ -32,6 +30,26 @@ public class ContainerEquip extends Container
     public void initContainer()
     {
         super.initContainer();
+    }
+
+    public StockEquip getStockEquip(EquipType type)
+    {
+        for (IStock stock : getStockList())
+            if(stock instanceof StockEquip)
+            {
+                StockEquip s = (StockEquip) stock;
+                if(s.getEquipTypes().contains(type))
+                    return s;
+            }
+        return null;
+    }
+    public StockEquip getSlotEquip(EquipType type,Coord coord)
+    {
+        StockEquip stock = getStockEquip(type);
+        if(stock==null)return null;
+        ISlot slot = stock.get(coord);
+        if(slot instanceof SlotEquip) return (StockEquip) slot;
+        return null;
     }
 
     public ContainerEquip setEquipSizeSingal(int size,List<EquipType> types)

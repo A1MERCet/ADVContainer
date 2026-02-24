@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Util
 {
-    public static GetResult serch(IContainer container, ItemDetailed detailed)
+    public static GetResult search(IContainer container, ItemDetailed detailed)
     {
         GetResult result = new GetResult();
 

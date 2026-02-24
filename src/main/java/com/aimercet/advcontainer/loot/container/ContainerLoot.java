@@ -5,7 +5,7 @@ import com.aimercet.advcontainer.container.ContainerTemplate;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
-import com.aimercet.advcontainer.loot.Condition.ISpawnCondition;
+import com.aimercet.advcontainer.loot.condition.ISpawnCondition;
 import com.aimercet.advcontainer.loot.ILootState;
 import com.aimercet.advcontainer.loot.item.ILootTable;
 import com.aimercet.advcontainer.loot.trigger.ILootTrigger;

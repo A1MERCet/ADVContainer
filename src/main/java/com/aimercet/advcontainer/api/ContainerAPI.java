@@ -13,13 +13,11 @@ import com.aimercet.advcontainer.container.handler.PlaceResult;
 import com.aimercet.advcontainer.container.handler.RemoveResult;
 import com.aimercet.advcontainer.container.handler.TransferResult;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
-import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
-import com.aimercet.advcontainer.player.modules.ModuleContainerState;
+import com.aimercet.advcontainer.modules.ModuleContainerState;
 import com.aimercet.advcontainer.util.SizeInt;
 import com.aimercet.brlib.log.Logger;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class ContainerAPI
 {
@@ -191,33 +189,6 @@ public class ContainerAPI
         dataItem
                 .setAmount(item.getAmount())
         ;
-        return dataItem;
-    }
-    public DataItem parseItem(ItemStack isk)
-    {
-        if(isk==null)return null;
-
-        TypeItem typeItem = ItemManager.Get(isk);
-        if(typeItem==null)return null;
-
-        DataItem dataItem = new DataItem();
-        parseItemBase(dataItem,typeItem);
-
-        SizeInt size = typeItem.getSize(isk);
-        dataItem
-                .setAmount(ItemManager.getAmount(isk))
-                .setSize(size.width,size.height)
-                ;
-
-        return dataItem;
-    }
-    public DataItem parseItem(TypeItem item)
-    {
-        if(item==null)return null;
-
-        DataItem dataItem = new DataItem();
-        parseItemBase(dataItem,item);
-
         return dataItem;
     }
 

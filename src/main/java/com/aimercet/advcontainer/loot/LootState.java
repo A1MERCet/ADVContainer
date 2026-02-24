@@ -1,7 +1,7 @@
 package com.aimercet.advcontainer.loot;
 
 import com.aimercet.advcontainer.container.source.ISource;
-import com.aimercet.advcontainer.loot.Condition.ISpawnCondition;
+import com.aimercet.advcontainer.loot.condition.ISpawnCondition;
 
 public class LootState implements ILootState
 {

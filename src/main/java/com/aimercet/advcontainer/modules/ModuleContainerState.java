@@ -1,4 +1,4 @@
-package com.aimercet.advcontainer.player.modules;
+package com.aimercet.advcontainer.modules;
 
 import com.aimercet.advcontainer.api.gui.GUIActionState;
 import com.aimercet.advcontainer.container.handler.source.HandleSourcePlayer;

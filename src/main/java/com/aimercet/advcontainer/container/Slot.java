@@ -4,8 +4,6 @@ import com.aimercet.advcontainer.api.gui.GPartStyle;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.util.Coord;
-import com.aimercet.advcontainer.util.UtilFile;
-import com.aimercet.advcontainer.util.UtilItem;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class Slot implements ISlot
@@ -45,7 +43,13 @@ public class Slot implements ISlot
     @Override public void setSourceCoord(Coord source) {this.sorceCoord = source;}
 
     @Override public ISlotItem getItem() {return item;}
-    @Override public void setItem(ISlotItem item) {this.item = item;}
+
+    @Override
+    public void setItem(ISlotItem item) {
+        ISlot.super.setItem(item);
+        this.item = item;
+    }
+
     @Override public GPartStyle getGUIStyle() {return style;}
     @Override public void setGUIStyle(GPartStyle guiStyle) {this.style = guiStyle;}
 

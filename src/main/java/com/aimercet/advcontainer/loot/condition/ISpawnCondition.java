@@ -1,4 +1,4 @@
-package com.aimercet.advcontainer.loot.Condition;
+package com.aimercet.advcontainer.loot.condition;
 
 public interface ISpawnCondition
 {

@@ -1,14 +1,8 @@
 package com.aimercet.advcontainer.bridge.minecraft.event;
 
-import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
-import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.backpack.Backpack;
 import com.aimercet.advcontainer.container.handler.PlaceResult;
-import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.container.slotitem.ISlotItem;
-import com.aimercet.advcontainer.container.source.ISource;
-import com.aimercet.advcontainer.item.item.TypeItem;
-import com.aimercet.advcontainer.util.Util;
 import com.aimercet.advcontainer.util.UtilItem;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;

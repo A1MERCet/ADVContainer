@@ -1,6 +1,5 @@
 package com.aimercet.advcontainer.container.handler;
 
-import com.aimercet.advcontainer.container.slotitem.ISlotItem;
 import com.aimercet.advcontainer.item.item.TypeItem;
 
 import java.util.ArrayList;

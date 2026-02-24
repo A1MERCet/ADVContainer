@@ -4,7 +4,7 @@ import com.aimercet.advcontainer.container.ContainerManager;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.source.ISource;
 import com.aimercet.advcontainer.container.source.SourceLoot;
-import com.aimercet.advcontainer.loot.Condition.ISpawnCondition;
+import com.aimercet.advcontainer.loot.condition.ISpawnCondition;
 import com.aimercet.advcontainer.loot.ILoot;
 import com.aimercet.advcontainer.loot.ILootState;
 import com.aimercet.advcontainer.loot.trigger.ILootTrigger;

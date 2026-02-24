@@ -3,7 +3,6 @@ package com.aimercet.advcontainer.container.handler.source;
 import com.aimercet.advcontainer.container.ContainerIndex;
 import com.aimercet.advcontainer.container.IContainer;
 import com.aimercet.advcontainer.container.handler.HandleResult;
-import com.aimercet.brlib.log.Logger;
 
 public class HandleSourceSystem implements IHandleSource
 {

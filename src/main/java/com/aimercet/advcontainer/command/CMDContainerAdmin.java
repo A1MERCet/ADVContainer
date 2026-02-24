@@ -6,7 +6,7 @@ import com.aimercet.advcontainer.container.handler.source.IHandleSource;
 import com.aimercet.advcontainer.bridge.minecraft.container.SlotItemStack;
 import com.aimercet.advcontainer.item.ItemManager;
 import com.aimercet.advcontainer.item.item.TypeItem;
-import com.aimercet.advcontainer.player.modules.ModuleContainerState;
+import com.aimercet.advcontainer.modules.ModuleContainerState;
 import com.aimercet.advcontainer.util.Coord;
 import com.aimercet.advcontainer.util.Util;
 import com.aimercet.advcontainer.util.UtilCommand;
@@ -69,7 +69,7 @@ public class CMDContainerAdmin extends CMDBasic
 
         StringBuilder b = new StringBuilder().append("查找容器["+uuid+"]内容["+itemID+"*"+amount+"]\n");
 
-        GetResult serchResult = Util.serch(container, new ItemDetailed().add(new ItemDetailed.Entry(item, amount)));
+        GetResult serchResult = Util.search(container, new ItemDetailed().add(new ItemDetailed.Entry(item, amount)));
         b.append(serchResult.toString());
 
         sender.sendMessage(b.toString());

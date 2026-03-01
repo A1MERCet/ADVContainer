@@ -8,6 +8,12 @@ import java.util.HashMap;
 
 public class DataItem
 {
+    public enum DataItemType
+    {
+        DEFAULT,CONTAINER
+    }
+
+    public DataItemType type = DataItemType.DEFAULT;
     public String id;
     public String name;
     public int x;
@@ -27,6 +33,8 @@ public class DataItem
     public DataItem() {
     }
 
+    public DataItemType getType() {return type;}
+    public DataItem setType(DataItemType type) {this.type = type;return this;}
     public String getID() {return id;}
     public DataItem setID(String id) {this.id = id;return this;}
     public String getName() {return name;}
@@ -58,7 +66,8 @@ public class DataItem
     public String toJson() {return new Gson().toJson(this);}
     public HashMap<String, String> getCustomData() {return customData;}
     public DataItem setCustomData(HashMap<String, String> customData) {this.customData = customData;return this;}
-    public DataItem addCustomData(String k,String v){customData.put(k,v);return this;}
+    public DataItem addCustomData(String k,String v){
+        customData.put(k,v);return this;}
 
 
     public HashMap<String,String> toMap()
@@ -71,7 +80,7 @@ public class DataItem
                 Object value = field.get(this);
                 map.put(field.getName(), value==null?"":value.toString());
             } catch (IllegalAccessException e) {e.printStackTrace();}
-        customData.forEach((k,v)->map.put("custom_"+k,v));
+        customData.forEach((k, v)->map.put("custom_"+k,v));
         return map;
     }
 

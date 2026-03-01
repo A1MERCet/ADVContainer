@@ -1,7 +1,6 @@
 package com.aimercet.advcontainer.api;
 
 import com.aimercet.advcontainer.api.gui.GUIActionState;
-import com.aimercet.advcontainer.api.gui.cursor.CursorSourceADVC;
 import com.aimercet.advcontainer.api.gui.data.DataContainer;
 import com.aimercet.advcontainer.api.gui.data.DataItem;
 import com.aimercet.advcontainer.api.gui.data.DataSlot;
@@ -105,7 +104,7 @@ public class ContainerAPI
         GUIActionState.Cursor cursor = getCursor(player);
         if(cursor==null)return false;
 
-        cursor.set(new CursorSourceADVC(new SlotSource(slot.getStock(), slot.getCoord())),rotate);
+        cursor.set(new SlotSource(slot.getStock(), slot.getCoord()),rotate);
 
         return true;
     }
@@ -156,7 +155,7 @@ public class ContainerAPI
 
     public DataItem parseItem(SlotSource source)
     {
-        if(source==null || source.getItem()==null)return null;
+        if(source==null || !source.hasItem())return null;
 
         ISlot slot = source.get();
         ISlotItem item = source.getItem();
@@ -166,6 +165,7 @@ public class ContainerAPI
         SizeInt size = slot.getContainer().getHandler().getItemSize(item,slot.isRotate());
 
         dataItem
+                .setType(DataItem.DataItemType.CONTAINER)
                 .setContainer(slot.getStock().getContainer().getUUID())
                 .setStock(slot.getStock().getContainer().getStockList().indexOf(slot.getStock()))
                 .setCoord(source.coord.x,source.coord.y)

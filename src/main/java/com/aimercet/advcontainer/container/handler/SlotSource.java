@@ -61,6 +61,9 @@ public class SlotSource
         IStock stock = con.getStock(this.stock);
         return stock.get(coord);
     }
+    public boolean hasItem() {
+        return getItem()!=null;
+    }
     public ISlotItem getItem()
     {
         ISlot slot = get();
